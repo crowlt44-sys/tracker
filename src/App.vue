@@ -14,6 +14,11 @@
             <component :is="Component" :key="route.path" />
           </Transition>
         </RouterView>
+
+        <!-- Footer Watermark -->
+        <footer class="mt-auto py-6 text-center text-xs font-medium text-gray-400">
+          Powered by <span class="font-bold text-dark-base opacity-70 hover:opacity-100 hover:text-kuning-pastel transition-all cursor-pointer">magerans.id</span>
+        </footer>
       </main>
       <TheSidebar v-model="sidebarOpen" />
     </template>
