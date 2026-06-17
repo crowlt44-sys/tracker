@@ -31,26 +31,29 @@
         <div
           v-for="txn in filteredTransaksi"
           :key="txn.id"
-          class="flex items-center gap-4 p-3 sm:p-4 rounded-2xl hover:bg-cream-100/80 transition-all duration-200 group cursor-default"
+          class="flex items-center gap-3 sm:gap-4 py-3 sm:py-4 border-b border-cream-200/60 last:border-0 group"
         >
           <div
             :class="[
-              'w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-110',
-              txn.tipe === 'income' ? 'bg-green-500/15' : 'bg-red-500/15'
+              'w-10 h-10 rounded-2xl flex items-center justify-center shrink-0',
+              txn.tipe === 'income' ? 'bg-green-500/10' : 'bg-red-500/10'
             ]"
           >
             <ArrowTrendingUpIcon v-if="txn.tipe === 'income'" class="w-5 h-5 text-green-500" />
             <ArrowTrendingDownIcon v-else class="w-5 h-5 text-red-500" />
           </div>
           <div class="flex-1 min-w-0">
-            <p class="text-sm font-semibold text-dark-base">{{ txn.kategori }}</p>
-            <p class="text-xs text-gray-400">{{ txn.catatan || '—' }} &middot; {{ txn.tanggal }}</p>
+            <p class="text-sm font-bold text-dark-base truncate">{{ txn.kategori }}</p>
+            <p class="text-xs text-gray-400 mt-0.5 truncate">
+              <span v-if="txn.catatan">{{ txn.catatan }} &bull; </span>
+              <span>{{ txn.tanggal }}</span>
+            </p>
           </div>
-          <div class="flex items-center gap-2 shrink-0">
-            <p :class="['text-sm font-bold transition-transform duration-200 group-hover:scale-105', txn.tipe === 'income' ? 'text-green-600' : 'text-red-500']">
+          <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+            <p class="text-xs font-semibold text-gray-500 shrink-0">
               {{ txn.tipe === 'income' ? '+' : '-' }}{{ formatRupiah(txn.jumlah) }}
             </p>
-            <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-all duration-200 translate-x-2 group-hover:translate-x-0">
+            <div class="flex gap-0.5 sm:gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-200 translate-x-0 sm:translate-x-2 sm:group-hover:translate-x-0">
               <button @click="openEdit(txn)" class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-kuning-pastel/20 text-gray-400 hover:text-dark-base transition-all duration-150 active:scale-90 btn-ripple">
                 <PencilIcon class="w-3.5 h-3.5" />
               </button>

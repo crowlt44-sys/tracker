@@ -82,17 +82,20 @@
             <div
               v-for="txn in weekTransaksi"
               :key="txn.id"
-              class="flex items-center gap-3 p-3 rounded-2xl hover:bg-cream-200/50 transition-colors"
+              class="flex items-center gap-3 py-3 border-b border-cream-200/60 last:border-0"
             >
-              <div :class="['w-8 h-8 rounded-xl flex items-center justify-center shrink-0', txn.tipe === 'income' ? 'bg-green-500/15' : 'bg-red-500/15']">
-                <ArrowTrendingUpIcon v-if="txn.tipe === 'income'" class="w-4 h-4 text-green-500" />
-                <ArrowTrendingDownIcon v-else class="w-4 h-4 text-red-500" />
+              <div :class="['w-10 h-10 rounded-2xl flex items-center justify-center shrink-0', txn.tipe === 'income' ? 'bg-green-500/10' : 'bg-red-500/10']">
+                <ArrowTrendingUpIcon v-if="txn.tipe === 'income'" class="w-5 h-5 text-green-500" />
+                <ArrowTrendingDownIcon v-else class="w-5 h-5 text-red-500" />
               </div>
               <div class="flex-1 min-w-0">
-                <p class="text-sm font-semibold text-dark-base">{{ txn.kategori }}</p>
-                <p class="text-xs text-gray-400">{{ txn.catatan || '-' }} · {{ txn.tanggal }}</p>
+                <p class="text-sm font-bold text-dark-base truncate">{{ txn.kategori }}</p>
+                <p class="text-xs text-gray-400 mt-0.5 truncate">
+                  <span v-if="txn.catatan">{{ txn.catatan }} &bull; </span>
+                  <span>{{ txn.tanggal }}</span>
+                </p>
               </div>
-              <p :class="['text-sm font-bold shrink-0', txn.tipe === 'income' ? 'text-green-600' : 'text-red-500']">
+              <p class="text-xs font-semibold text-gray-500 shrink-0">
                 {{ txn.tipe === 'income' ? '+' : '-' }}{{ formatRupiah(txn.jumlah) }}
               </p>
             </div>
@@ -155,17 +158,20 @@
             <div
               v-for="txn in monthTransaksi"
               :key="txn.id"
-              class="flex items-center gap-3 p-3 rounded-2xl hover:bg-cream-200/50 transition-colors"
+              class="flex items-center gap-3 py-3 border-b border-cream-200/60 last:border-0"
             >
-              <div :class="['w-8 h-8 rounded-xl flex items-center justify-center shrink-0', txn.tipe === 'income' ? 'bg-green-500/15' : 'bg-red-500/15']">
-                <ArrowTrendingUpIcon v-if="txn.tipe === 'income'" class="w-4 h-4 text-green-500" />
-                <ArrowTrendingDownIcon v-else class="w-4 h-4 text-red-500" />
+              <div :class="['w-10 h-10 rounded-2xl flex items-center justify-center shrink-0', txn.tipe === 'income' ? 'bg-green-500/10' : 'bg-red-500/10']">
+                <ArrowTrendingUpIcon v-if="txn.tipe === 'income'" class="w-5 h-5 text-green-500" />
+                <ArrowTrendingDownIcon v-else class="w-5 h-5 text-red-500" />
               </div>
               <div class="flex-1 min-w-0">
-                <p class="text-sm font-semibold text-dark-base">{{ txn.kategori }}</p>
-                <p class="text-xs text-gray-400">{{ txn.catatan || '-' }} · {{ txn.tanggal }}</p>
+                <p class="text-sm font-bold text-dark-base truncate">{{ txn.kategori }}</p>
+                <p class="text-xs text-gray-400 mt-0.5 truncate">
+                  <span v-if="txn.catatan">{{ txn.catatan }} &bull; </span>
+                  <span>{{ txn.tanggal }}</span>
+                </p>
               </div>
-              <p :class="['text-sm font-bold shrink-0', txn.tipe === 'income' ? 'text-green-600' : 'text-red-500']">
+              <p class="text-xs font-semibold text-gray-500 shrink-0">
                 {{ txn.tipe === 'income' ? '+' : '-' }}{{ formatRupiah(txn.jumlah) }}
               </p>
             </div>

@@ -8,11 +8,11 @@ export default {
     extend: {
       colors: {
         cream: {
-          50: '#FDFCF7',
-          100: '#F9F6EE',
-          200: '#F3EFE0',
-          300: '#EDE6D2',
-          400: '#E0D6BE',
+          50: '#FFFFFF',
+          100: '#F8F9FA',
+          200: '#F1F3F5',
+          300: '#E9ECEF',
+          400: '#DEE2E6',
         },
         kuning: {
           pastel: '#FFD254',

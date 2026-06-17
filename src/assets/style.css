@@ -107,10 +107,7 @@
 
 @layer base {
   body {
-    @apply min-h-screen;
-    background: linear-gradient(135deg, #FDFCF7 0%, #F9F6EE 40%, #FFF9E6 70%, #F3EFE0 100%);
-    background-size: 300% 300%;
-    animation: gradientShift 12s ease infinite;
+    @apply min-h-screen bg-cream-100 text-gray-800;
   }
 
   ::selection {
@@ -120,11 +117,12 @@
 
 @layer components {
   .glass {
-    @apply bg-white/70 backdrop-blur-xl border border-white/30 shadow-lg shadow-black/[0.03];
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    @apply bg-white border border-cream-200/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)];
+    transition: box-shadow 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .glass:hover {
-    @apply shadow-xl shadow-black/[0.06];
+    @apply shadow-[0_20px_40px_rgb(0,0,0,0.08)];
+    transform: translateY(-2px);
   }
 
   .glass-strong {

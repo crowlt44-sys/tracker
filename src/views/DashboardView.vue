@@ -21,68 +21,73 @@
 
     <template v-else>
       <!-- Summary cards -->
-      <div class="grid grid-cols-3 gap-3 mb-5">
-        <!-- Pemasukan -->
+      <!-- Summary cards -->
+      <div class="space-y-4 mb-8">
+        <!-- Hero Card (Selisih / Total Saldo) -->
         <div
-          class="stat-card animate-fade-up delay-100 group"
+          class="relative bg-dark-base rounded-[32px] p-6 sm:p-8 overflow-hidden shadow-2xl shadow-dark-base/20 animate-fade-up delay-100 group"
           @mouseenter="tiltCard($event)"
           @mouseleave="resetTilt($event)"
         >
-          <div class="flex items-center gap-1.5 mb-2">
-            <div class="w-5 h-5 rounded-lg bg-green-500/20 flex items-center justify-center">
-              <ArrowTrendingUpIcon class="w-3 h-3 text-green-400" />
+          <!-- Decorative circles -->
+          <div class="absolute -right-8 -top-8 w-40 h-40 bg-white/5 rounded-full blur-2xl group-hover:bg-white/10 transition-colors duration-500" />
+          <div class="absolute -left-8 -bottom-8 w-32 h-32 bg-kuning-pastel/10 rounded-full blur-xl group-hover:bg-kuning-pastel/20 transition-colors duration-500" />
+
+          <div class="relative z-10 flex flex-col items-center text-center">
+            <div class="flex items-center gap-2 mb-4">
+              <div class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center backdrop-blur-sm border border-white/10">
+                <SparklesIcon class="w-4 h-4 text-kuning-pastel" />
+              </div>
+              <p class="text-xs font-semibold text-white/70 uppercase tracking-widest">Total Saldo</p>
             </div>
-            <p class="text-[9px] text-gray-500 font-semibold uppercase tracking-wider">Masuk</p>
-          </div>
-          <p class="text-base font-extrabold text-green-400 truncate animate-count-up delay-300">
-            {{ formatRupiah(totalPemasukan) }}
-          </p>
-          <div class="mt-2 h-0.5 rounded-full bg-green-500/20 overflow-hidden">
-            <div class="h-full bg-green-400 rounded-full animate-slide-right delay-500" style="width: 70%" />
+            
+            <p :class="['text-4xl sm:text-5xl font-extrabold tracking-tight animate-count-up delay-300', selisih >= 0 ? 'text-white' : 'text-red-400']">
+              {{ formatRupiah(selisih) }}
+            </p>
+            
+            <div class="mt-4 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/5">
+              <div class="w-2 h-2 rounded-full animate-pulse" :class="selisih >= 0 ? 'bg-kuning-pastel shadow-[0_0_8px_rgba(255,210,84,0.6)]' : 'bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.6)]'" />
+              <span class="text-[10px] sm:text-xs font-medium text-white/80">{{ selisih >= 0 ? 'Surplus Bulan Ini' : 'Defisit Bulan Ini' }}</span>
+            </div>
           </div>
         </div>
 
-        <!-- Pengeluaran -->
-        <div
-          class="stat-card animate-fade-up delay-200 group"
-          @mouseenter="tiltCard($event)"
-          @mouseleave="resetTilt($event)"
-        >
-          <div class="flex items-center gap-1.5 mb-2">
-            <div class="w-5 h-5 rounded-lg bg-red-500/20 flex items-center justify-center">
-              <ArrowTrendingDownIcon class="w-3 h-3 text-red-400" />
+        <!-- Grid 2 Kolom (Pemasukan & Pengeluaran) -->
+        <div class="grid grid-cols-2 gap-3 sm:gap-4">
+          <!-- Pemasukan -->
+          <div
+            class="stat-card !p-4 sm:!p-5 animate-fade-up delay-200 group relative overflow-hidden bg-white/60 backdrop-blur-xl border border-white/50"
+            @mouseenter="tiltCard($event)"
+            @mouseleave="resetTilt($event)"
+          >
+            <div class="absolute top-0 right-0 w-20 h-20 bg-green-500/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 group-hover:bg-green-500/10 transition-colors duration-500" />
+            <div class="flex items-center gap-2.5 mb-3">
+              <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-green-500/10 flex items-center justify-center shrink-0">
+                <ArrowTrendingUpIcon class="w-4 h-4 sm:w-5 sm:h-5 text-green-500" />
+              </div>
+              <p class="text-[10px] sm:text-xs text-gray-500 font-bold uppercase tracking-widest">Pemasukan</p>
             </div>
-            <p class="text-[9px] text-gray-500 font-semibold uppercase tracking-wider">Keluar</p>
+            <p class="text-lg sm:text-2xl font-extrabold text-green-500 truncate animate-count-up delay-400">
+              {{ formatRupiah(totalPemasukan) }}
+            </p>
           </div>
-          <p class="text-base font-extrabold text-red-400 truncate animate-count-up delay-400">
-            {{ formatRupiah(totalPengeluaran) }}
-          </p>
-          <div class="mt-2 h-0.5 rounded-full bg-red-500/20 overflow-hidden">
-            <div
-              class="h-full bg-red-400 rounded-full animate-slide-right delay-600"
-              :style="{ width: totalPemasukan > 0 ? Math.min(100, Math.round(totalPengeluaran / totalPemasukan * 100)) + '%' : '0%' }"
-            />
-          </div>
-        </div>
 
-        <!-- Selisih -->
-        <div
-          class="stat-card animate-fade-up delay-300 animate-pulse-glow group"
-          @mouseenter="tiltCard($event)"
-          @mouseleave="resetTilt($event)"
-        >
-          <div class="flex items-center gap-1.5 mb-2">
-            <div class="w-5 h-5 rounded-lg bg-kuning-pastel/30 flex items-center justify-center">
-              <SparklesIcon class="w-3 h-3 text-kuning-pastel" />
+          <!-- Pengeluaran -->
+          <div
+            class="stat-card !p-4 sm:!p-5 animate-fade-up delay-300 group relative overflow-hidden bg-white/60 backdrop-blur-xl border border-white/50"
+            @mouseenter="tiltCard($event)"
+            @mouseleave="resetTilt($event)"
+          >
+            <div class="absolute top-0 right-0 w-20 h-20 bg-red-500/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 group-hover:bg-red-500/10 transition-colors duration-500" />
+            <div class="flex items-center gap-2.5 mb-3">
+              <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-red-500/10 flex items-center justify-center shrink-0">
+                <ArrowTrendingDownIcon class="w-4 h-4 sm:w-5 sm:h-5 text-red-500" />
+              </div>
+              <p class="text-[10px] sm:text-xs text-gray-500 font-bold uppercase tracking-widest">Pengeluaran</p>
             </div>
-            <p class="text-[9px] text-gray-500 font-semibold uppercase tracking-wider">Selisih</p>
-          </div>
-          <p :class="['text-base font-extrabold truncate animate-count-up delay-500', selisih >= 0 ? 'text-kuning-pastel' : 'text-red-400']">
-            {{ formatRupiah(selisih) }}
-          </p>
-          <div class="mt-2 flex items-center gap-1">
-            <div class="w-1.5 h-1.5 rounded-full animate-pulse" :class="selisih >= 0 ? 'bg-kuning-pastel' : 'bg-red-400'" />
-            <span class="text-[9px] text-gray-500">{{ selisih >= 0 ? 'Surplus' : 'Defisit' }}</span>
+            <p class="text-lg sm:text-2xl font-extrabold text-red-500 truncate animate-count-up delay-500">
+              {{ formatRupiah(totalPengeluaran) }}
+            </p>
           </div>
         </div>
       </div>
@@ -133,32 +138,35 @@
           </router-link>
         </div>
 
-        <div v-if="recentTransaksi.length" class="space-y-1">
+        <div v-if="recentTransaksi.length" class="space-y-3 mt-2">
           <div
             v-for="(txn, i) in recentTransaksi"
             :key="txn.id"
-            class="flex items-center gap-3 p-3 rounded-2xl hover:bg-cream-100/80 transition-all duration-200 group cursor-default animate-fade-up"
+            class="flex items-center gap-3 animate-fade-up"
             :style="{ animationDelay: (600 + i * 60) + 'ms' }"
           >
+            <!-- Icon -->
             <div
               :class="[
-                'w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-110',
-                txn.tipe === 'income' ? 'bg-green-500/15' : 'bg-red-500/15'
+                'w-10 h-10 rounded-2xl flex items-center justify-center shrink-0',
+                txn.tipe === 'income' ? 'bg-green-500/10' : 'bg-red-500/10'
               ]"
             >
-              <ArrowTrendingUpIcon v-if="txn.tipe === 'income'" class="w-4 h-4 text-green-500" />
-              <ArrowTrendingDownIcon v-else class="w-4 h-4 text-red-500" />
+              <ArrowTrendingUpIcon v-if="txn.tipe === 'income'" class="w-5 h-5 text-green-500" />
+              <ArrowTrendingDownIcon v-else class="w-5 h-5 text-red-500" />
             </div>
+            
+            <!-- Details -->
             <div class="flex-1 min-w-0">
-              <p class="text-sm font-semibold text-dark-base truncate">{{ txn.kategori }}</p>
-              <p class="text-xs text-gray-400">{{ txn.catatan || '—' }} · {{ txn.tanggal }}</p>
+              <p class="text-sm font-bold text-dark-base truncate">{{ txn.kategori }}</p>
+              <p class="text-xs text-gray-400 mt-0.5 truncate">
+                <span v-if="txn.catatan">{{ txn.catatan }} &bull; </span>
+                <span>{{ txn.tanggal }}</span>
+              </p>
             </div>
-            <p
-              :class="[
-                'text-sm font-bold shrink-0 transition-transform duration-200 group-hover:scale-105',
-                txn.tipe === 'income' ? 'text-green-600' : 'text-red-500'
-              ]"
-            >
+            
+            <!-- Amount -->
+            <p class="text-xs font-semibold text-gray-500 shrink-0">
               {{ txn.tipe === 'income' ? '+' : '-' }}{{ formatRupiah(txn.jumlah) }}
             </p>
           </div>
