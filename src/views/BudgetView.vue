@@ -9,7 +9,7 @@
         @click="activeTab === 'anggaran' ? (showFormAnggaran = true) : (showFormBill = true)"
         class="flex items-center gap-2 px-4 py-2.5 bg-dark-base text-white text-sm font-semibold rounded-xl hover:bg-dark-soft transition-colors"
       >
-        <PlusIcon class="w-4 h-4" />
+        <HugeiconsIcon :icon="PlusSignIcon" class="w-4 h-4" />
         Tambah
       </button>
     </div>
@@ -47,10 +47,10 @@
                 </span>
                 <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button @click="openEditAnggaran(item)" class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-kuning-pastel/20 text-gray-400 hover:text-dark-base transition-colors">
-                    <PencilIcon class="w-3.5 h-3.5" />
+                    <HugeiconsIcon :icon="PencilEdit01Icon" class="w-3.5 h-3.5" />
                   </button>
                   <button @click="confirmDeleteAnggaran(item)" class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-red-500/10 text-gray-400 hover:text-red-500 transition-colors">
-                    <TrashIcon class="w-3.5 h-3.5" />
+                    <HugeiconsIcon :icon="Delete01Icon" class="w-3.5 h-3.5" />
                   </button>
                 </div>
               </div>
@@ -67,7 +67,7 @@
               <span>Limit: <strong class="text-dark-base">{{ formatRupiah(item.limit_bulanan) }}</strong></span>
             </div>
           </div>
-          <EmptyState v-if="!anggaran.length" :icon="ChartBarIcon" title="Belum ada anggaran" description="Buat anggaran pertama untuk mulai melacak pengeluaran" />
+          <EmptyState v-if="!anggaran.length" :icon="Analytics01Icon" title="Belum ada anggaran" description="Buat anggaran pertama untuk mulai melacak pengeluaran" />
         </div>
       </div>
 
@@ -82,8 +82,8 @@
               class="flex items-center gap-4 p-3 rounded-2xl hover:bg-cream-200/50 transition-colors"
             >
               <div :class="['w-10 h-10 rounded-xl flex items-center justify-center shrink-0', bill.sudah_dibayar ? 'bg-green-500/15' : 'bg-kuning-pastel/20']">
-                <CheckCircleIcon v-if="bill.sudah_dibayar" class="w-5 h-5 text-green-500" />
-                <ClockIcon v-else class="w-5 h-5 text-kuning-300" />
+                <HugeiconsIcon :icon="CheckmarkCircle01Icon" v-if="bill.sudah_dibayar" class="w-5 h-5 text-green-500" />
+                <HugeiconsIcon :icon="Clock01Icon" v-else class="w-5 h-5 text-kuning-300" />
               </div>
               <div class="flex-1 min-w-0">
                 <p class="text-sm font-semibold text-dark-base">{{ bill.nama }}</p>
@@ -96,7 +96,7 @@
               </div>
             </div>
           </div>
-          <EmptyState v-else :icon="BellIcon" title="Belum ada tagihan" description="Tambahkan tagihan rutin untuk pengingat otomatis" />
+          <EmptyState v-else :icon="Notification01Icon" title="Belum ada tagihan" description="Tambahkan tagihan rutin untuk pengingat otomatis" />
         </div>
       </div>
 
@@ -110,7 +110,7 @@
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-lg font-bold text-dark-base">{{ editingAnggaran ? 'Edit Anggaran' : 'Tambah Anggaran' }}</h3>
             <button type="button" @click="closeFormAnggaran" class="w-8 h-8 flex items-center justify-center rounded-xl bg-cream-100 hover:bg-cream-200 text-gray-400 hover:text-gray-600 transition-colors">
-              <XMarkIcon class="w-4 h-4" />
+              <HugeiconsIcon :icon="Cancel01Icon" class="w-4 h-4" />
             </button>
           </div>
           <form @submit.prevent="handleAddAnggaran" class="space-y-4">
@@ -139,7 +139,7 @@
             <XMarkIcon class="w-4 h-4" />
           </button>
           <div class="w-12 h-12 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <TrashIcon class="w-6 h-6 text-red-500" />
+            <HugeiconsIcon :icon="Delete01Icon" class="w-6 h-6 text-red-500" />
           </div>
           <h3 class="text-base font-bold text-dark-base mb-1">Hapus Anggaran?</h3>
           <p class="text-sm text-gray-400 mb-5">{{ deletingAnggaran.kategori }} &middot; Limit {{ formatRupiah(deletingAnggaran.limit_bulanan) }}</p>
@@ -161,7 +161,7 @@
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-lg font-bold text-dark-base">Tambah Tagihan</h3>
             <button type="button" @click="showFormBill = false" class="w-8 h-8 flex items-center justify-center rounded-xl bg-cream-100 hover:bg-cream-200 text-gray-400 hover:text-gray-600 transition-colors">
-              <XMarkIcon class="w-4 h-4" />
+              <HugeiconsIcon :icon="Cancel01Icon" class="w-4 h-4" />
             </button>
           </div>
           <form @submit.prevent="handleAddBill" class="space-y-4">
@@ -196,7 +196,17 @@ import { ref, onMounted } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 import { useFinance } from '@/composables/useFinance'
 import { formatRupiah } from '@/utils/format'
-import { PlusIcon, ChartBarIcon, XMarkIcon, BellIcon, CheckCircleIcon, ClockIcon, PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
+import { HugeiconsIcon } from '@hugeicons/vue'
+import {
+  PlusSignIcon,
+  Analytics01Icon,
+  Cancel01Icon,
+  Notification01Icon,
+  CheckmarkCircle01Icon,
+  Clock01Icon,
+  PencilEdit01Icon,
+  Delete01Icon
+} from '@hugeicons/core-free-icons'
 import { supabase } from '@/composables/useSupabase'
 import EmptyState from '@/components/ui/EmptyState.vue'
 import BaseSelect from '@/components/ui/BaseSelect.vue'

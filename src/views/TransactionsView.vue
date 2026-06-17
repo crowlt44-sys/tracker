@@ -27,7 +27,7 @@
             @click="openAdd"
             class="bg-white text-dark-base rounded-2xl px-5 py-3 font-bold text-sm shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:-translate-y-1 transition-transform flex items-center gap-2"
           >
-            <PlusIcon class="w-5 h-5" />
+            <HugeiconsIcon :icon="PlusSignIcon" class="w-5 h-5" />
             Tambah
           </button>
         </div>
@@ -59,8 +59,8 @@
               txn.tipe === 'income' ? 'bg-green-500/10 group-hover:bg-green-500/20' : 'bg-red-500/10 group-hover:bg-red-500/20'
             ]"
           >
-            <ArrowTrendingUpIcon v-if="txn.tipe === 'income'" class="w-5 h-5 text-green-500" />
-            <ArrowTrendingDownIcon v-else class="w-5 h-5 text-red-500" />
+            <HugeiconsIcon :icon="AnalyticsUpIcon" v-if="txn.tipe === 'income'" class="w-5 h-5 text-green-500" />
+            <HugeiconsIcon :icon="AnalyticsDownIcon" v-else class="w-5 h-5 text-red-500" />
           </div>
           <div class="flex-1 min-w-0">
             <p class="text-sm font-bold text-dark-base truncate">{{ txn.kategori }}</p>
@@ -75,10 +75,10 @@
             </p>
             <div class="flex gap-0.5 sm:gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-200 translate-x-0 sm:translate-x-2 sm:group-hover:translate-x-0">
               <button @click="openEdit(txn)" class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-kuning-pastel/20 text-gray-400 hover:text-dark-base transition-all duration-150 active:scale-90 btn-ripple">
-                <PencilIcon class="w-3.5 h-3.5" />
+                <HugeiconsIcon :icon="PencilEdit01Icon" class="w-3.5 h-3.5" />
               </button>
               <button @click="confirmDelete(txn)" class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-red-500/10 text-gray-400 hover:text-red-500 transition-all duration-150 active:scale-90 btn-ripple">
-                <TrashIcon class="w-3.5 h-3.5" />
+                <HugeiconsIcon :icon="Delete01Icon" class="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
@@ -86,7 +86,7 @@
       </TransitionGroup>
 
       <div v-if="!filteredTransaksi.length" class="py-10 text-center">
-        <EmptyState :icon="CurrencyDollarIcon" title="Belum ada transaksi" description="Mulai catat pemasukan atau pengeluaran pertama Anda" />
+        <EmptyState :icon="Wallet02Icon" title="Belum ada transaksi" description="Mulai catat pemasukan atau pengeluaran pertama Anda" />
       </div>
     </div>
 
@@ -98,7 +98,7 @@
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-lg font-bold text-dark-base">{{ editingTxn ? 'Edit Transaksi' : 'Tambah Transaksi' }}</h3>
             <button type="button" @click="closeForm" class="w-8 h-8 flex items-center justify-center rounded-xl bg-cream-100 hover:bg-cream-200 text-gray-400 hover:text-gray-600 transition-colors">
-              <XMarkIcon class="w-4 h-4" />
+              <HugeiconsIcon :icon="Cancel01Icon" class="w-4 h-4" />
             </button>
           </div>
           <form @submit.prevent="handleSubmit" class="space-y-4">
@@ -143,10 +143,10 @@
         <div class="absolute inset-0 bg-black/40" />
         <div class="relative bg-white rounded-3xl p-6 w-full max-w-sm text-center shadow-2xl">
           <button type="button" @click="deletingTxn = null" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-xl bg-cream-100 hover:bg-cream-200 text-gray-400 hover:text-gray-600 transition-colors">
-            <XMarkIcon class="w-4 h-4" />
+            <HugeiconsIcon :icon="Cancel01Icon" class="w-4 h-4" />
           </button>
           <div class="w-12 h-12 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <TrashIcon class="w-6 h-6 text-red-500" />
+            <HugeiconsIcon :icon="Delete01Icon" class="w-6 h-6 text-red-500" />
           </div>
           <h3 class="text-base font-bold text-dark-base mb-1">Hapus Transaksi?</h3>
           <p class="text-sm text-gray-400 mb-5">{{ deletingTxn.kategori }} &middot; {{ formatRupiah(deletingTxn.jumlah) }}</p>
@@ -168,7 +168,16 @@ import { useAuth } from '@/composables/useAuth'
 import { useFinance } from '@/composables/useFinance'
 import { goeyToast } from 'goey-toast-vue'
 import { formatRupiah } from '@/utils/format'
-import { PlusIcon, ArrowTrendingUpIcon, ArrowTrendingDownIcon, CurrencyDollarIcon, PencilIcon, TrashIcon, XMarkIcon } from '@heroicons/vue/24/outline'
+import { HugeiconsIcon } from '@hugeicons/vue'
+import {
+  PlusSignIcon,
+  AnalyticsUpIcon,
+  AnalyticsDownIcon,
+  Wallet02Icon,
+  PencilEdit01Icon,
+  Delete01Icon,
+  Cancel01Icon
+} from '@hugeicons/core-free-icons'
 import EmptyState from '@/components/ui/EmptyState.vue'
 import BaseSelect from '@/components/ui/BaseSelect.vue'
 

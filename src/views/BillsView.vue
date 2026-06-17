@@ -27,7 +27,7 @@
             @click="showForm = true"
             class="bg-white text-dark-base rounded-2xl px-5 py-3 font-bold text-sm shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:-translate-y-1 transition-transform flex items-center gap-2"
           >
-            <PlusIcon class="w-5 h-5" />
+            <HugeiconsIcon :icon="PlusSignIcon" class="w-5 h-5" />
             Tambah
           </button>
         </div>
@@ -47,8 +47,8 @@
               bill.sudah_dibayar ? 'bg-green-500/10 group-hover:bg-green-500/20' : 'bg-kuning-pastel/20 group-hover:bg-kuning-pastel/30'
             ]"
           >
-            <CheckCircleIcon v-if="bill.sudah_dibayar" class="w-6 h-6 text-green-500" />
-            <ClockIcon v-else class="w-6 h-6 text-orange-400" />
+            <HugeiconsIcon :icon="CheckmarkCircle01Icon" v-if="bill.sudah_dibayar" class="w-6 h-6 text-green-500" />
+            <HugeiconsIcon :icon="Clock01Icon" v-else class="w-6 h-6 text-orange-400" />
           </div>
           <div class="flex-1 min-w-0">
             <p class="text-sm font-semibold text-dark-base">{{ bill.nama }}</p>
@@ -71,17 +71,17 @@
               
               <div class="flex items-center gap-1 ml-2 border-l border-gray-200 pl-2">
                 <button @click="editBill(bill)" class="text-gray-400 hover:text-blue-500 transition-colors" title="Edit">
-                  <PencilIcon class="w-4 h-4" />
+                  <HugeiconsIcon :icon="PencilEdit01Icon" class="w-4 h-4" />
                 </button>
                 <button @click="confirmDelete(bill.id)" class="text-gray-400 hover:text-red-500 transition-colors" title="Hapus">
-                  <TrashIcon class="w-4 h-4" />
+                  <HugeiconsIcon :icon="Delete01Icon" class="w-4 h-4" />
                 </button>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <EmptyState v-else :icon="BellIcon" title="Belum ada tagihan" description="Tambahkan tagihan rutin untuk pengingat otomatis" />
+      <EmptyState v-else :icon="Notification01Icon" title="Belum ada tagihan" description="Tambahkan tagihan rutin untuk pengingat otomatis" />
     </div>
 
     <!-- Modal Form -->
@@ -92,7 +92,7 @@
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-lg font-bold text-dark-base">{{ isEditing ? 'Edit Tagihan' : 'Tambah Tagihan' }}</h3>
             <button type="button" @click="closeForm" class="w-8 h-8 flex items-center justify-center rounded-xl bg-cream-100 hover:bg-cream-200 text-gray-400 hover:text-gray-600 transition-colors">
-              <XMarkIcon class="w-4 h-4" />
+              <HugeiconsIcon :icon="Cancel01Icon" class="w-4 h-4" />
             </button>
           </div>
           <form @submit.prevent="handleAdd" class="space-y-4">
@@ -130,7 +130,7 @@
         <div class="absolute inset-0 bg-black/40" />
         <div class="relative bg-white rounded-3xl p-6 w-full max-w-sm shadow-2xl text-center">
           <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <TrashIcon class="w-8 h-8 text-red-500" />
+            <HugeiconsIcon :icon="Delete01Icon" class="w-8 h-8 text-red-500" />
           </div>
           <h3 class="text-lg font-bold text-dark-base mb-2">Hapus Tagihan</h3>
           <p class="text-sm text-gray-500 mb-6">Apakah Anda yakin ingin menghapus tagihan ini? Tindakan ini tidak dapat dibatalkan.</p>
@@ -154,7 +154,16 @@ import { useAuth } from '@/composables/useAuth'
 import { useFinance } from '@/composables/useFinance'
 import { goeyToast } from 'goey-toast-vue'
 import { formatRupiah } from '@/utils/format'
-import { PlusIcon, BellIcon, CheckCircleIcon, ClockIcon, XMarkIcon, PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
+import { HugeiconsIcon } from '@hugeicons/vue'
+import {
+  PlusSignIcon,
+  Notification01Icon,
+  CheckmarkCircle01Icon,
+  Clock01Icon,
+  Cancel01Icon,
+  PencilEdit01Icon,
+  Delete01Icon
+} from '@hugeicons/core-free-icons'
 import { supabase } from '@/composables/useSupabase'
 import EmptyState from '@/components/ui/EmptyState.vue'
 

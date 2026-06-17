@@ -31,7 +31,7 @@
       <!-- Form Container -->
       <div class="bg-white/60 backdrop-blur-xl border border-white/60 shadow-[0_4px_20px_rgb(0,0,0,0.03)] rounded-3xl p-6 sm:p-8 mb-6">
         <h4 class="text-xs font-bold text-dark-base uppercase tracking-widest mb-6 flex items-center gap-2">
-          <UserIcon class="w-4 h-4 text-kuning-600" />
+          <HugeiconsIcon :icon="UserIcon" class="w-4 h-4 text-kuning-600" />
           Informasi Pribadi
         </h4>
         <form @submit.prevent="handleUpdate" class="space-y-5">
@@ -39,7 +39,7 @@
             <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 block ml-1">Nama Lengkap</label>
             <div class="relative group">
               <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <UserCircleIcon class="h-5 w-5 text-gray-400 group-focus-within:text-[#E5B53C] transition-colors" />
+                <HugeiconsIcon :icon="UserCircleIcon" class="h-5 w-5 text-gray-400 group-focus-within:text-[#E5B53C] transition-colors" />
               </div>
               <input v-model="form.nama_lengkap" type="text" required class="block w-full pl-11 pr-4 py-3.5 bg-white/50 border border-cream-200 shadow-sm rounded-2xl text-sm font-semibold text-dark-base focus:ring-2 focus:ring-[#FFD254] focus:border-transparent transition-all backdrop-blur-sm outline-none" placeholder="Masukkan nama lengkap" />
             </div>
@@ -48,7 +48,7 @@
             <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 block ml-1">URL Avatar (opsional)</label>
             <div class="relative group">
               <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <PhotoIcon class="h-5 w-5 text-gray-400 group-focus-within:text-[#E5B53C] transition-colors" />
+                <HugeiconsIcon :icon="Image01Icon" class="h-5 w-5 text-gray-400 group-focus-within:text-[#E5B53C] transition-colors" />
               </div>
               <input v-model="form.avatar_url" type="url" class="block w-full pl-11 pr-4 py-3.5 bg-white/50 border border-cream-200 shadow-sm rounded-2xl text-sm font-semibold text-dark-base focus:ring-2 focus:ring-[#FFD254] focus:border-transparent transition-all backdrop-blur-sm outline-none" placeholder="https://example.com/avatar.jpg" />
             </div>
@@ -73,11 +73,11 @@
         >
           <span class="flex items-center gap-3">
             <div class="w-8 h-8 rounded-full bg-red-500/20 group-hover:bg-white/20 flex items-center justify-center transition-colors">
-              <ArrowRightOnRectangleIcon class="w-4 h-4" />
+              <HugeiconsIcon :icon="Logout03Icon" class="w-4 h-4" />
             </div>
             Keluar dari Akun
           </span>
-          <ChevronRightIcon class="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          <HugeiconsIcon :icon="ArrowRight01Icon" class="w-4 h-4 group-hover:translate-x-1 transition-transform" />
         </button>
       </div>
     </div>
@@ -90,7 +90,8 @@ import { useRouter } from 'vue-router'
 import { useAuth } from '@/composables/useAuth'
 import { useFinance } from '@/composables/useFinance'
 import { goeyToast } from 'goey-toast-vue'
-import { ArrowRightOnRectangleIcon, UserIcon, UserCircleIcon, PhotoIcon, ChevronRightIcon } from '@heroicons/vue/24/outline'
+import { HugeiconsIcon } from '@hugeicons/vue'
+import { Logout03Icon, UserIcon, UserCircleIcon, Image01Icon, ArrowRight01Icon } from '@hugeicons/core-free-icons'
 
 const router = useRouter()
 const { user, signOut } = useAuth()

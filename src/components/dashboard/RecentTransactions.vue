@@ -17,8 +17,8 @@
             txn.tipe === 'income' ? 'bg-green-500/15' : 'bg-red-500/15'
           ]"
         >
-          <ArrowTrendingUpIcon v-if="txn.tipe === 'income'" class="w-4 h-4 text-green-400" />
-          <ArrowTrendingDownIcon v-else class="w-4 h-4 text-red-400" />
+          <HugeiconsIcon :icon="AnalyticsUpIcon" v-if="txn.tipe === 'income'" class="w-5 h-5 text-green-500" />
+        <HugeiconsIcon :icon="AnalyticsDownIcon" v-else class="w-5 h-5 text-red-500" />
         </div>
         <div class="flex-1 min-w-0">
           <p class="text-sm font-medium text-white/90 truncate">{{ txn.kategori }}</p>
@@ -67,7 +67,8 @@
 
 <script setup>
 import { formatRupiah } from '@/utils/format'
-import { ArrowTrendingUpIcon, ArrowTrendingDownIcon } from '@heroicons/vue/24/outline'
+import { HugeiconsIcon } from '@hugeicons/vue'
+import { AnalyticsUpIcon, AnalyticsDownIcon } from '@hugeicons/core-free-icons'
 
 defineProps({
   transaksi: { type: Array, default: () => [] },

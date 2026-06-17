@@ -7,7 +7,7 @@
           @click="$emit('prev-month')"
           class="p-1.5 rounded-xl hover:bg-cream-200 transition-colors"
         >
-          <ChevronLeftIcon class="w-4 h-4 text-gray-400" />
+          <HugeiconsIcon :icon="ArrowLeft01Icon" class="w-4 h-4 text-gray-400" />
         </button>
         <span class="text-xs font-semibold text-dark-base min-w-[100px] text-center select-none">
           {{ bulanTahun }}
@@ -16,7 +16,7 @@
           @click="$emit('next-month')"
           class="p-1.5 rounded-xl hover:bg-cream-200 transition-colors"
         >
-          <ChevronRightIcon class="w-4 h-4 text-gray-400" />
+          <HugeiconsIcon :icon="ArrowRight01Icon" class="w-4 h-4 text-gray-400" />
         </button>
       </div>
     </div>
@@ -48,7 +48,7 @@
 
     <div v-if="tagihanHariIni.length" class="mt-4 p-3 bg-red-50/60 rounded-2xl border border-red-100">
       <div class="flex items-center gap-1.5 mb-2">
-        <ExclamationCircleIcon class="w-4 h-4 text-red-400" />
+        <HugeiconsIcon :icon="AlertCircleIcon" class="w-4 h-4 text-red-400" />
         <span class="text-[10px] font-medium text-red-400 uppercase tracking-wider">Jatuh tempo hari ini</span>
       </div>
       <div v-for="t in tagihanHariIni" :key="t.id" class="flex items-center justify-between py-1">
@@ -61,7 +61,8 @@
 
 <script setup>
 import { computed } from 'vue'
-import { ChevronLeftIcon, ChevronRightIcon, ExclamationCircleIcon } from '@heroicons/vue/24/outline'
+import { HugeiconsIcon } from '@hugeicons/vue'
+import { ArrowLeft01Icon, ArrowRight01Icon, AlertCircleIcon } from '@hugeicons/core-free-icons'
 import { formatRupiah, getDaysInMonth, getBulanTahun } from '@/utils/format'
 
 const props = defineProps({

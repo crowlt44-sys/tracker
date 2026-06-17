@@ -38,7 +38,7 @@
             class="lg:hidden p-2.5 rounded-xl hover:bg-cream-200 transition-all duration-200 active:scale-90 btn-ripple"
             aria-label="Toggle menu"
           >
-            <Bars3Icon class="w-5 h-5 text-dark-base" />
+            <HugeiconsIcon :icon="Menu01Icon" class="w-5 h-5 text-dark-base" :stroke-width="2" />
           </button>
         </div>
       </div>
@@ -52,7 +52,8 @@
 <script setup>
 import { computed, defineAsyncComponent } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { Bars3Icon } from '@heroicons/vue/24/outline'
+import { HugeiconsIcon } from '@hugeicons/vue'
+import { Menu01Icon } from '@hugeicons/core-free-icons'
 import { formatRupiah } from '@/utils/format'
 import AnimatedPillNav from '@/components/ui/AnimatedPillNav.vue'
 

@@ -11,7 +11,7 @@
         </div>
         <div class="flex items-center gap-2">
           <span class="text-xs font-semibold text-dark-base">{{ section.amount }}</span>
-          <ChevronDownIcon
+          <HugeiconsIcon :icon="ArrowDown01Icon"
             :class="[
               'w-4 h-4 text-gray-400 transition-transform duration-200',
               openIndex === index ? 'rotate-180' : ''
@@ -46,7 +46,8 @@
 
 <script setup>
 import { ref } from 'vue'
-import { ChevronDownIcon } from '@heroicons/vue/24/outline'
+import { HugeiconsIcon } from '@hugeicons/vue'
+import { ArrowDown01Icon } from '@hugeicons/core-free-icons'
 
 defineProps({
   sections: { type: Array, required: true }

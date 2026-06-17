@@ -81,21 +81,21 @@
         <div class="flex items-center justify-between gap-3 sm:gap-4 animate-fade-up delay-200">
           <button @click="$router.push('/transaksi')" class="flex-1 bg-white/60 backdrop-blur-xl border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-3xl p-4 flex flex-col items-center justify-center gap-2 hover:bg-white hover:-translate-y-1 transition-all group">
             <div class="w-12 h-12 rounded-full bg-green-500/10 flex items-center justify-center group-hover:scale-110 group-hover:bg-green-500/15 transition-all">
-              <ArrowTrendingUpIcon class="w-6 h-6 text-green-500" />
+              <HugeiconsIcon :icon="AnalyticsUpIcon" class="w-6 h-6 text-green-500" />
             </div>
             <span class="text-xs font-bold text-dark-base">Pemasukan</span>
           </button>
           
           <button @click="$router.push('/transaksi')" class="flex-1 bg-white/60 backdrop-blur-xl border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-3xl p-4 flex flex-col items-center justify-center gap-2 hover:bg-white hover:-translate-y-1 transition-all group">
             <div class="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center group-hover:scale-110 group-hover:bg-red-500/15 transition-all">
-              <ArrowTrendingDownIcon class="w-6 h-6 text-red-500" />
+              <HugeiconsIcon :icon="AnalyticsDownIcon" class="w-6 h-6 text-red-500" />
             </div>
             <span class="text-xs font-bold text-dark-base">Pengeluaran</span>
           </button>
           
           <button @click="$router.push('/transaksi')" class="flex-1 bg-gradient-to-br from-dark-base to-black border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-3xl p-4 flex flex-col items-center justify-center gap-2 hover:shadow-xl hover:shadow-dark-base/30 hover:-translate-y-1 transition-all group">
             <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center group-hover:scale-110 group-hover:bg-white/20 transition-all">
-              <PlusIcon class="w-6 h-6 text-white" />
+              <HugeiconsIcon :icon="PlusSignIcon" class="w-6 h-6 text-white" />
             </div>
             <span class="text-xs font-bold text-white">Tambah</span>
           </button>
@@ -120,7 +120,7 @@
         <div class="bg-white/60 backdrop-blur-xl border border-white/60 shadow-[0_4px_20px_rgb(0,0,0,0.03)] rounded-2xl p-4">
           <div class="flex items-center gap-2 mb-3">
             <div class="w-6 h-6 rounded-full bg-green-500/10 flex items-center justify-center shrink-0">
-              <ArrowTrendingUpIcon class="w-3.5 h-3.5 text-green-500" />
+              <HugeiconsIcon :icon="AnalyticsUpIcon" class="w-3.5 h-3.5 text-green-500" />
             </div>
             <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest truncate">Rekor Pemasukan</p>
           </div>
@@ -130,7 +130,7 @@
         <div class="bg-white/60 backdrop-blur-xl border border-white/60 shadow-[0_4px_20px_rgb(0,0,0,0.03)] rounded-2xl p-4">
           <div class="flex items-center gap-2 mb-3">
             <div class="w-6 h-6 rounded-full bg-red-500/10 flex items-center justify-center shrink-0">
-              <ArrowTrendingDownIcon class="w-3.5 h-3.5 text-red-500" />
+              <HugeiconsIcon :icon="AnalyticsDownIcon" class="w-3.5 h-3.5 text-red-500" />
             </div>
             <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest truncate">Rekor Pengeluaran</p>
           </div>
@@ -145,7 +145,7 @@
           <div>
             <h3 class="text-sm font-bold text-dark-base flex items-center gap-2">
               <span class="w-6 h-6 rounded-lg bg-kuning-pastel/20 inline-flex items-center justify-center">
-                <ChartBarIcon class="w-3.5 h-3.5 text-kuning-pastel" />
+                <HugeiconsIcon :icon="Analytics01Icon" class="w-3.5 h-3.5 text-kuning-pastel" />
               </span>
               Pengeluaran Minggu Ini
             </h3>
@@ -160,7 +160,7 @@
           <Bar v-if="hasWeeklyData" :data="weeklyChartData" :options="chartOptions" />
           <div v-else class="h-full flex flex-col items-center justify-center gap-2">
             <div class="w-10 h-10 rounded-2xl bg-cream-200/80 flex items-center justify-center animate-float">
-              <ChartBarIcon class="w-5 h-5 text-gray-300" />
+              <HugeiconsIcon :icon="Analytics01Icon" class="w-5 h-5 text-gray-300" />
             </div>
             <p class="text-xs text-gray-400">Belum ada pengeluaran minggu ini</p>
           </div>
@@ -172,7 +172,7 @@
         <div class="flex items-center justify-between mb-4">
           <h3 class="text-sm font-bold text-dark-base flex items-center gap-2">
             <span class="w-6 h-6 rounded-lg bg-dark-base/10 inline-flex items-center justify-center">
-              <ClockIcon class="w-3.5 h-3.5 text-dark-base" />
+              <HugeiconsIcon :icon="Clock01Icon" class="w-3.5 h-3.5 text-dark-base" />
             </span>
             Transaksi Terakhir
           </h3>
@@ -181,7 +181,7 @@
             class="text-xs text-gray-400 hover:text-dark-base transition-all duration-200 flex items-center gap-1 group"
           >
             Lihat semua
-            <ChevronRightIcon class="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+            <HugeiconsIcon :icon="ArrowRight01Icon" class="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
           </router-link>
         </div>
 
@@ -199,8 +199,8 @@
                 txn.tipe === 'income' ? 'bg-green-500/10' : 'bg-red-500/10'
               ]"
             >
-              <ArrowTrendingUpIcon v-if="txn.tipe === 'income'" class="w-5 h-5 text-green-500" />
-              <ArrowTrendingDownIcon v-else class="w-5 h-5 text-red-500" />
+              <HugeiconsIcon :icon="AnalyticsUpIcon" v-if="txn.tipe === 'income'" class="w-5 h-5 text-green-500" />
+              <HugeiconsIcon :icon="AnalyticsDownIcon" v-else class="w-5 h-5 text-red-500" />
             </div>
             
             <!-- Details -->
@@ -221,7 +221,7 @@
 
         <div v-else class="py-10 text-center">
           <div class="w-12 h-12 rounded-2xl bg-cream-200/80 flex items-center justify-center mx-auto mb-3 animate-float">
-            <ClockIcon class="w-6 h-6 text-gray-300" />
+            <HugeiconsIcon :icon="Clock01Icon" class="w-6 h-6 text-gray-300" />
           </div>
           <p class="text-xs text-gray-400">Belum ada transaksi bulan ini</p>
         </div>
@@ -238,15 +238,16 @@ import BaseSelect from '@/components/ui/BaseSelect.vue'
 import { useAuth } from '@/composables/useAuth'
 import { useFinance } from '@/composables/useFinance'
 import { formatRupiah } from '@/utils/format'
+import { HugeiconsIcon } from '@hugeicons/vue'
 import {
-  ArrowTrendingUpIcon,
-  ArrowTrendingDownIcon,
-  ChartBarIcon,
-  ClockIcon,
-  ChevronRightIcon,
+  AnalyticsUpIcon,
+  AnalyticsDownIcon,
+  Analytics01Icon,
+  Clock01Icon,
+  ArrowRight01Icon,
   SparklesIcon,
-  PlusIcon
-} from '@heroicons/vue/24/outline'
+  PlusSignIcon
+} from '@hugeicons/core-free-icons'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip)
 

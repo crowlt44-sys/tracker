@@ -10,14 +10,14 @@
           @click="exportCSV"
           class="flex items-center gap-2 px-4 py-2 bg-white/60 backdrop-blur-md border border-white/60 text-dark-base text-xs font-bold rounded-xl hover:bg-white transition-all shadow-[0_2px_10px_rgb(0,0,0,0.02)]"
         >
-          <ArrowDownTrayIcon class="w-4 h-4" />
+          <HugeiconsIcon :icon="Download01Icon" class="w-4 h-4" />
           CSV
         </button>
         <button
           @click="exportPDF"
           class="flex items-center gap-2 px-4 py-2 bg-dark-base text-white text-xs font-bold rounded-xl hover:bg-dark-soft transition-all shadow-[0_4px_12px_rgba(0,0,0,0.1)] hover:-translate-y-0.5"
         >
-          <DocumentArrowDownIcon class="w-4 h-4" />
+          <HugeiconsIcon :icon="Download01Icon" class="w-4 h-4" />
           PDF
         </button>
       </div>
@@ -88,8 +88,8 @@
               class="flex items-center gap-4 py-4 sm:py-5 border-b border-cream-200/60 last:border-0 group"
             >
               <div :class="['w-12 h-12 rounded-full flex items-center justify-center shrink-0', txn.tipe === 'income' ? 'bg-green-500/10' : 'bg-red-500/10']">
-                <ArrowTrendingUpIcon v-if="txn.tipe === 'income'" class="w-5 h-5 text-green-500" />
-                <ArrowTrendingDownIcon v-else class="w-5 h-5 text-red-500" />
+                <HugeiconsIcon :icon="AnalyticsUpIcon" v-if="txn.tipe === 'income'" class="w-5 h-5 text-green-500" />
+                <HugeiconsIcon :icon="AnalyticsDownIcon" v-else class="w-5 h-5 text-red-500" />
               </div>
               <div class="flex-1 min-w-0">
                 <p class="text-sm font-bold text-dark-base truncate">{{ txn.kategori }}</p>
@@ -112,11 +112,11 @@
         <!-- Month nav -->
         <div class="flex items-center justify-between mb-5 bg-white border border-cream-200 rounded-2xl px-4 py-3">
           <button @click="changeMonth(-1)" class="p-1.5 rounded-xl hover:bg-cream-100 transition-colors">
-            <ChevronLeftIcon class="w-4 h-4 text-gray-400" />
+            <HugeiconsIcon :icon="ArrowLeft01Icon" class="w-4 h-4 text-gray-400" />
           </button>
           <span class="text-sm font-bold text-dark-base">{{ bulanTahunLabel }}</span>
           <button @click="changeMonth(1)" class="p-1.5 rounded-xl hover:bg-cream-100 transition-colors">
-            <ChevronRightIcon class="w-4 h-4 text-gray-400" />
+            <HugeiconsIcon :icon="ArrowRight01Icon" class="w-4 h-4 text-gray-400" />
           </button>
         </div>
 
@@ -175,8 +175,8 @@
               class="flex items-center gap-4 py-4 sm:py-5 border-b border-cream-200/60 last:border-0 group"
             >
               <div :class="['w-12 h-12 rounded-full flex items-center justify-center shrink-0', txn.tipe === 'income' ? 'bg-green-500/10' : 'bg-red-500/10']">
-                <ArrowTrendingUpIcon v-if="txn.tipe === 'income'" class="w-5 h-5 text-green-500" />
-                <ArrowTrendingDownIcon v-else class="w-5 h-5 text-red-500" />
+                <HugeiconsIcon :icon="AnalyticsUpIcon" v-if="txn.tipe === 'income'" class="w-5 h-5 text-green-500" />
+                <HugeiconsIcon :icon="AnalyticsDownIcon" v-else class="w-5 h-5 text-red-500" />
               </div>
               <div class="flex-1 min-w-0">
                 <p class="text-sm font-bold text-dark-base truncate">{{ txn.kategori }}</p>
@@ -204,10 +204,14 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip, ArcE
 import { useAuth } from '@/composables/useAuth'
 import { useFinance } from '@/composables/useFinance'
 import { formatRupiah, getBulanTahun } from '@/utils/format'
+import { HugeiconsIcon } from '@hugeicons/vue'
 import {
-  ArrowDownTrayIcon, DocumentArrowDownIcon, ArrowTrendingUpIcon, ArrowTrendingDownIcon,
-  ChevronLeftIcon, ChevronRightIcon
-} from '@heroicons/vue/24/outline'
+  Download01Icon,
+  AnalyticsUpIcon,
+  AnalyticsDownIcon,
+  ArrowLeft01Icon,
+  ArrowRight01Icon
+} from '@hugeicons/core-free-icons'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, ArcElement)
 

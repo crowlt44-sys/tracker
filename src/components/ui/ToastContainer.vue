@@ -11,7 +11,7 @@
         >
           <!-- Icon -->
           <div class="toast-icon-wrap">
-            <component :is="iconMap[toast.type]" class="toast-icon" />
+            <HugeiconsIcon :icon="iconMap[toast.type]" class="toast-icon" />
           </div>
 
           <!-- Content -->
@@ -22,7 +22,7 @@
 
           <!-- Close -->
           <button class="toast-close" @click.stop="remove(toast.id)">
-            <XMarkIcon class="w-3.5 h-3.5" />
+            <HugeiconsIcon :icon="Cancel01Icon" class="w-3.5 h-3.5" />
           </button>
 
           <!-- Progress bar -->
@@ -40,20 +40,21 @@
 
 <script setup>
 import { useToast } from '@/composables/useToast'
+import { HugeiconsIcon } from '@hugeicons/vue'
 import {
-  CheckCircleIcon,
-  ExclamationCircleIcon,
-  ExclamationTriangleIcon,
+  CheckmarkCircle01Icon,
+  AlertCircleIcon,
+  Alert01Icon,
   InformationCircleIcon,
-  XMarkIcon
-} from '@heroicons/vue/24/outline'
+  Cancel01Icon
+} from '@hugeicons/core-free-icons'
 
 const { toasts, remove } = useToast()
 
 const iconMap = {
-  success: CheckCircleIcon,
-  error:   ExclamationCircleIcon,
-  warning: ExclamationTriangleIcon,
+  success: CheckmarkCircle01Icon,
+  error:   AlertCircleIcon,
+  warning: Alert01Icon,
   info:    InformationCircleIcon,
 }
 </script>

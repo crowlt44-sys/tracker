@@ -11,7 +11,7 @@
         >
           <span class="block truncate">{{ internalValue || placeholder }}</span>
           <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-            <ChevronUpDownIcon class="h-4 w-4 text-gray-400" aria-hidden="true" />
+            <HugeiconsIcon :icon="ArrowUpDownIcon" class="h-4 w-4 text-gray-400" />
           </span>
         </ListboxButton>
 
@@ -43,7 +43,7 @@
                   v-if="selected"
                   class="absolute inset-y-0 left-0 flex items-center pl-3 text-kuning-500"
                 >
-                  <CheckIcon class="h-4 w-4" aria-hidden="true" />
+                  <HugeiconsIcon :icon="CheckIcon" class="h-4 w-4" stroke-width="2.5" />
                 </span>
               </li>
             </ListboxOption>
@@ -62,7 +62,8 @@ import {
   ListboxOptions,
   ListboxOption,
 } from '@headlessui/vue'
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
+import { HugeiconsIcon } from '@hugeicons/vue'
+import { CheckIcon, ArrowUpDownIcon } from '@hugeicons/core-free-icons'
 
 const props = defineProps({
   modelValue: {

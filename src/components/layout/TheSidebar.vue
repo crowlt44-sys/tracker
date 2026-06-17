@@ -25,7 +25,7 @@
             @click="$emit('update:modelValue', false)"
             class="p-1.5 rounded-xl hover:bg-cream-200 transition-all duration-200 active:scale-90 btn-ripple"
           >
-            <XMarkIcon class="w-5 h-5 text-gray-400" />
+            <HugeiconsIcon :icon="Cancel01Icon" class="w-5 h-5 text-gray-400" />
           </button>
         </div>
 
@@ -44,12 +44,14 @@
             ]"
             :style="{ animationDelay: (100 + i * 50) + 'ms' }"
           >
-            <component
-              :is="currentRoute === item.key ? item.iconSolid : item.icon"
+            <HugeiconsIcon
+              :icon="item.icon"
               class="w-5 h-5 shrink-0 transition-transform duration-200 group-hover:scale-110"
+              :stroke-width="currentRoute === item.key ? 2.5 : 1.5"
             />
             <span>{{ item.label }}</span>
-            <ChevronRightIcon
+            <HugeiconsIcon
+              :icon="ArrowRight01Icon"
               v-if="currentRoute !== item.key"
               class="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all duration-200"
             />
@@ -63,7 +65,7 @@
             @click="handleLogout"
             class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-red-400 hover:bg-red-50 transition-all duration-200 group btn-ripple"
           >
-            <ArrowRightOnRectangleIcon class="w-5 h-5 transition-transform duration-200 group-hover:-translate-x-0.5" />
+            <HugeiconsIcon :icon="Logout03Icon" class="w-5 h-5 transition-transform duration-200 group-hover:-translate-x-0.5" />
             Keluar
           </button>
         </div>
@@ -94,10 +96,11 @@
               />
             </Transition>
 
-            <component
-              :is="currentRoute === item.key ? item.iconSolid : item.icon"
+            <HugeiconsIcon
+              :icon="item.icon"
               class="relative w-5 h-5 transition-all duration-300"
               :class="currentRoute === item.key ? 'scale-110 -translate-y-0.5' : 'group-hover:scale-105'"
+              :stroke-width="currentRoute === item.key ? 2.5 : 1.5"
             />
             <span
               class="relative text-[10px] font-semibold leading-none transition-all duration-300"
@@ -131,10 +134,11 @@
             v-if="currentRoute === 'Transactions'"
             class="absolute inset-0 rounded-2xl animate-pulse-glow"
           />
-          <component
-            :is="currentRoute === 'Transactions' ? CurrencyDollarIconSolid : CurrencyDollarIcon"
+          <HugeiconsIcon
+            :icon="Wallet02Icon"
             class="w-6 h-6 text-kuning-pastel transition-transform duration-300"
             :class="currentRoute === 'Transactions' ? 'scale-110' : 'group-hover:scale-105'"
+            :stroke-width="currentRoute === 'Transactions' ? 2.5 : 1.5"
           />
           <span
             class="text-[9px] font-semibold leading-none mt-0.5"
@@ -158,10 +162,11 @@
               />
             </Transition>
 
-            <component
-              :is="currentRoute === item.key ? item.iconSolid : item.icon"
+            <HugeiconsIcon
+              :icon="item.icon"
               class="relative w-5 h-5 transition-all duration-300"
               :class="currentRoute === item.key ? 'scale-110 -translate-y-0.5' : 'group-hover:scale-105'"
+              :stroke-width="currentRoute === item.key ? 2.5 : 1.5"
             />
             <span
               class="relative text-[10px] font-semibold leading-none transition-all duration-300"
@@ -187,25 +192,17 @@
 <script setup>
 import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { HugeiconsIcon } from '@hugeicons/vue'
 import {
-  XMarkIcon,
-  ArrowRightOnRectangleIcon,
-  HomeIcon,
-  CurrencyDollarIcon,
-  ChartBarIcon,
-  DocumentTextIcon,
-  BellIcon,
-  Cog6ToothIcon,
-  ChevronRightIcon
-} from '@heroicons/vue/24/outline'
-import {
-  HomeIcon as HomeIconSolid,
-  CurrencyDollarIcon as CurrencyDollarIconSolid,
-  ChartBarIcon as ChartBarIconSolid,
-  DocumentTextIcon as DocumentTextIconSolid,
-  BellIcon as BellIconSolid,
-  Cog6ToothIcon as Cog6ToothIconSolid
-} from '@heroicons/vue/24/solid'
+  Cancel01Icon,
+  Logout03Icon,
+  Home11Icon,
+  Wallet02Icon,
+  Analytics01Icon,
+  Notification01Icon,
+  Setting07Icon,
+  ArrowRight01Icon
+} from '@hugeicons/core-free-icons'
 import { useAuth } from '@/composables/useAuth'
 
 const props = defineProps({
@@ -219,11 +216,11 @@ const route = useRoute()
 const { signOut } = useAuth()
 
 const navItems = [
-  { key: 'Dashboard', label: 'Home', icon: HomeIcon, iconSolid: HomeIconSolid },
-  { key: 'Transactions', label: 'Transaksi', icon: CurrencyDollarIcon, iconSolid: CurrencyDollarIconSolid },
-  { key: 'Bills', label: 'Tagihan', icon: BellIcon, iconSolid: BellIconSolid },
-  { key: 'Reports', label: 'Laporan', icon: DocumentTextIcon, iconSolid: DocumentTextIconSolid },
-  { key: 'Settings', label: 'Profil', icon: Cog6ToothIcon, iconSolid: Cog6ToothIconSolid }
+  { key: 'Dashboard', label: 'Home', icon: Home11Icon },
+  { key: 'Transactions', label: 'Transaksi', icon: Wallet02Icon },
+  { key: 'Bills', label: 'Tagihan', icon: Notification01Icon },
+  { key: 'Reports', label: 'Laporan', icon: Analytics01Icon },
+  { key: 'Settings', label: 'Profil', icon: Setting07Icon }
 ]
 
 const leftItems = computed(() => navItems.filter(i => ['Dashboard', 'Bills'].includes(i.key)))
