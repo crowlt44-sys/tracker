@@ -135,9 +135,17 @@
           </div>
         </div>
 
+        <!-- Chart Bulan -->
+        <div class="glass rounded-3xl p-5 mb-4" v-if="kategoriData.length">
+          <h3 class="text-sm font-bold text-dark-base mb-4">Grafik Kategori Pengeluaran</h3>
+          <div class="h-[220px] flex justify-center">
+            <Doughnut :data="monthlyChartData" :options="monthlyChartOptions" />
+          </div>
+        </div>
+
         <!-- Per kategori -->
         <div class="glass rounded-3xl p-5 mb-4" v-if="kategoriData.length">
-          <h3 class="text-sm font-bold text-dark-base mb-4">Pengeluaran per Kategori</h3>
+          <h3 class="text-sm font-bold text-dark-base mb-4">Detail per Kategori</h3>
           <div class="space-y-3">
             <div v-for="k in kategoriData" :key="k.kategori">
               <div class="flex items-center justify-between mb-1">
@@ -185,8 +193,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { Bar } from 'vue-chartjs'
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip } from 'chart.js'
+import { Bar, Doughnut } from 'vue-chartjs'
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip, ArcElement } from 'chart.js'
 import { useAuth } from '@/composables/useAuth'
 import { useFinance } from '@/composables/useFinance'
 import { formatRupiah, getBulanTahun } from '@/utils/format'
@@ -195,7 +203,7 @@ import {
   ChevronLeftIcon, ChevronRightIcon
 } from '@heroicons/vue/24/outline'
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip)
+ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, ArcElement)
 
 const { user } = useAuth()
 const finance = useFinance()
@@ -248,6 +256,42 @@ const kategoriData = computed(() => {
     .sort((a, b) => b[1] - a[1])
     .map(([kategori, total]) => ({ kategori, total, pct: Math.round((total / max) * 100) }))
 })
+
+const monthlyChartData = computed(() => {
+  const labels = kategoriData.value.map(k => k.kategori)
+  const data = kategoriData.value.map(k => k.total)
+  
+  const backgroundColors = [
+    '#FFD254', '#4ADE80', '#F87171', '#60A5FA', '#A78BFA', '#F472B6', '#34D399', '#FBBF24', '#9CA3AF', '#D1D5DB'
+  ]
+
+  return {
+    labels,
+    datasets: [{
+      data,
+      backgroundColor: backgroundColors.slice(0, data.length),
+      borderWidth: 0,
+      hoverOffset: 4
+    }]
+  }
+})
+
+const monthlyChartOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  cutout: '70%',
+  plugins: {
+    legend: { display: false },
+    tooltip: {
+      backgroundColor: '#1E1E1E',
+      bodyFont: { family: 'Inter', size: 12, weight: '600' },
+      padding: 10,
+      cornerRadius: 10,
+      displayColors: true,
+      callbacks: { label: ctx => ' Rp ' + Number(ctx.raw).toLocaleString('id-ID') }
+    }
+  }
+}
 
 const chartOptions = {
   responsive: true,

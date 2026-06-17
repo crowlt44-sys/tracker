@@ -99,10 +99,7 @@
             </div>
             <div>
               <label class="text-xs font-medium text-gray-500 mb-1.5 block">Kategori</label>
-              <select v-model="form.kategori" required class="input-field appearance-none">
-                <option value="" disabled>Pilih kategori</option>
-                <option v-for="k in categories" :key="k" :value="k">{{ k }}</option>
-              </select>
+              <BaseSelect v-model="form.kategori" :options="categories" placeholder="Pilih kategori" />
             </div>
             <div>
               <label class="text-xs font-medium text-gray-500 mb-1.5 block">Catatan (opsional)</label>
@@ -153,6 +150,7 @@ import { goeyToast } from 'goey-toast-vue'
 import { formatRupiah } from '@/utils/format'
 import { PlusIcon, ArrowTrendingUpIcon, ArrowTrendingDownIcon, CurrencyDollarIcon, PencilIcon, TrashIcon, XMarkIcon } from '@heroicons/vue/24/outline'
 import EmptyState from '@/components/ui/EmptyState.vue'
+import BaseSelect from '@/components/ui/BaseSelect.vue'
 
 const { user } = useAuth()
 const finance = useFinance()
@@ -196,6 +194,10 @@ function closeForm() { showForm.value = false; editingTxn.value = null }
 function confirmDelete(txn) { deletingTxn.value = txn }
 
 async function handleSubmit() {
+  if (!form.value.kategori) {
+    goeyToast.error('Gagal menyimpan', { description: 'Silakan pilih kategori terlebih dahulu' })
+    return
+  }
   submitting.value = true
   try {
     if (editingTxn.value) {

@@ -295,6 +295,25 @@ export function useFinance() {
     return data
   }
 
+  const updateBill = async (id, updates) => {
+    const { data, error: err } = await supabase
+      .from('bills')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single()
+    if (err) throw err
+    return data
+  }
+
+  const deleteBill = async (id) => {
+    const { error: err } = await supabase
+      .from('bills')
+      .delete()
+      .eq('id', id)
+    if (err) throw err
+  }
+
   // ─── REALTIME ──────────────────────────────────────────
 
   const subscribeTransaksi = (userId, callback) => {
@@ -330,7 +349,7 @@ export function useFinance() {
     getTotalPengeluaranBulan, getTotalPemasukanBulan, getWeeklySpending,
     fetchAnggaran, upsertAnggaran, deleteAnggaran,
     fetchGoals, addGoal,
-    fetchBills, addBill,
+    fetchBills, addBill, updateBill, deleteBill,
     subscribeTransaksi, unsubscribeAll
   }
 }

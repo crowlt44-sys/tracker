@@ -37,16 +37,27 @@
               <span v-if="bill.kategori">&middot; {{ bill.kategori }}</span>
             </p>
           </div>
-          <div class="text-right shrink-0">
+          <div class="flex flex-col items-end shrink-0 gap-1">
             <p class="text-sm font-bold text-dark-base">{{ formatRupiah(bill.jumlah) }}</p>
-            <button
-              v-if="!bill.sudah_dibayar"
-              @click="togglePaid(bill)"
-              class="text-[10px] text-kuning-pastel font-semibold hover:underline"
-            >
-              Tandai dibayar
-            </button>
-            <span v-else class="text-[10px] text-green-500 font-semibold">Lunas</span>
+            <div class="flex items-center gap-2">
+              <button
+                v-if="!bill.sudah_dibayar"
+                @click="togglePaid(bill)"
+                class="text-[10px] text-kuning-pastel font-semibold hover:underline"
+              >
+                Tandai dibayar
+              </button>
+              <span v-else class="text-[10px] text-green-500 font-semibold">Lunas</span>
+              
+              <div class="flex items-center gap-1 ml-2 border-l border-gray-200 pl-2">
+                <button @click="editBill(bill)" class="text-gray-400 hover:text-blue-500 transition-colors" title="Edit">
+                  <PencilIcon class="w-4 h-4" />
+                </button>
+                <button @click="confirmDelete(bill.id)" class="text-gray-400 hover:text-red-500 transition-colors" title="Hapus">
+                  <TrashIcon class="w-4 h-4" />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -55,12 +66,12 @@
 
     <!-- Modal Form -->
     <Transition name="fade">
-      <div v-if="showForm" class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="showForm = false">
+      <div v-if="showForm" class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="closeForm">
         <div class="absolute inset-0 bg-black/40" />
         <div class="relative bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl">
           <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-bold text-dark-base">Tambah Tagihan</h3>
-            <button type="button" @click="showForm = false" class="w-8 h-8 flex items-center justify-center rounded-xl bg-cream-100 hover:bg-cream-200 text-gray-400 hover:text-gray-600 transition-colors">
+            <h3 class="text-lg font-bold text-dark-base">{{ isEditing ? 'Edit Tagihan' : 'Tambah Tagihan' }}</h3>
+            <button type="button" @click="closeForm" class="w-8 h-8 flex items-center justify-center rounded-xl bg-cream-100 hover:bg-cream-200 text-gray-400 hover:text-gray-600 transition-colors">
               <XMarkIcon class="w-4 h-4" />
             </button>
           </div>
@@ -86,9 +97,31 @@
               :disabled="submitting"
               class="w-full py-3 bg-dark-base text-white font-semibold rounded-xl hover:bg-dark-soft transition-colors disabled:opacity-50"
             >
-              {{ submitting ? 'Menyimpan...' : 'Simpan Tagihan' }}
+              {{ submitting ? 'Menyimpan...' : (isEditing ? 'Simpan Perubahan' : 'Simpan Tagihan') }}
             </button>
           </form>
+        </div>
+      </div>
+    </Transition>
+
+    <!-- Delete Confirmation Modal -->
+    <Transition name="fade">
+      <div v-if="showDeleteModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="showDeleteModal = false">
+        <div class="absolute inset-0 bg-black/40" />
+        <div class="relative bg-white rounded-3xl p-6 w-full max-w-sm shadow-2xl text-center">
+          <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <TrashIcon class="w-8 h-8 text-red-500" />
+          </div>
+          <h3 class="text-lg font-bold text-dark-base mb-2">Hapus Tagihan</h3>
+          <p class="text-sm text-gray-500 mb-6">Apakah Anda yakin ingin menghapus tagihan ini? Tindakan ini tidak dapat dibatalkan.</p>
+          <div class="flex gap-3">
+            <button @click="showDeleteModal = false" class="flex-1 py-3 bg-cream-100 text-dark-base font-semibold rounded-xl hover:bg-cream-200 transition-colors">
+              Batal
+            </button>
+            <button @click="executeDelete" :disabled="submittingDelete" class="flex-1 py-3 bg-red-500 text-white font-semibold rounded-xl hover:bg-red-600 transition-colors disabled:opacity-50">
+              {{ submittingDelete ? 'Menghapus...' : 'Hapus' }}
+            </button>
+          </div>
         </div>
       </div>
     </Transition>
@@ -100,7 +133,7 @@ import { ref, onMounted } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 import { useFinance } from '@/composables/useFinance'
 import { formatRupiah } from '@/utils/format'
-import { PlusIcon, BellIcon, CheckCircleIcon, ClockIcon, XMarkIcon } from '@heroicons/vue/24/outline'
+import { PlusIcon, BellIcon, CheckCircleIcon, ClockIcon, XMarkIcon, PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import { supabase } from '@/composables/useSupabase'
 import EmptyState from '@/components/ui/EmptyState.vue'
 
@@ -110,6 +143,12 @@ const finance = useFinance()
 const bills = ref([])
 const showForm = ref(false)
 const submitting = ref(false)
+const isEditing = ref(false)
+const editId = ref(null)
+
+const showDeleteModal = ref(false)
+const deleteId = ref(null)
+const submittingDelete = ref(false)
 
 const newBill = ref({
   nama: '',
@@ -123,17 +162,59 @@ onMounted(async () => {
   bills.value = await finance.fetchBills(user.value.id)
 })
 
+function closeForm() {
+  showForm.value = false
+  isEditing.value = false
+  editId.value = null
+  newBill.value = { nama: '', jumlah: null, tanggal_jatuh_tempo: null, kategori: '' }
+}
+
+function editBill(bill) {
+  isEditing.value = true
+  editId.value = bill.id
+  newBill.value = {
+    nama: bill.nama,
+    jumlah: bill.jumlah,
+    tanggal_jatuh_tempo: bill.tanggal_jatuh_tempo,
+    kategori: bill.kategori
+  }
+  showForm.value = true
+}
+
 async function handleAdd() {
   submitting.value = true
   try {
-    await finance.addBill({ user_id: user.value.id, ...newBill.value })
+    if (isEditing.value) {
+      await finance.updateBill(editId.value, { ...newBill.value })
+    } else {
+      await finance.addBill({ user_id: user.value.id, ...newBill.value })
+    }
     bills.value = await finance.fetchBills(user.value.id)
-    showForm.value = false
-    newBill.value = { nama: '', jumlah: null, tanggal_jatuh_tempo: null, kategori: '' }
+    closeForm()
   } catch (err) {
     alert('Gagal menyimpan: ' + err.message)
   } finally {
     submitting.value = false
+  }
+}
+
+function confirmDelete(id) {
+  deleteId.value = id
+  showDeleteModal.value = true
+}
+
+async function executeDelete() {
+  if (!deleteId.value) return
+  submittingDelete.value = true
+  try {
+    await finance.deleteBill(deleteId.value)
+    bills.value = await finance.fetchBills(user.value.id)
+    showDeleteModal.value = false
+    deleteId.value = null
+  } catch (err) {
+    alert('Gagal menghapus: ' + err.message)
+  } finally {
+    submittingDelete.value = false
   }
 }
 

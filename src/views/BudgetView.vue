@@ -116,10 +116,7 @@
           <form @submit.prevent="handleAddAnggaran" class="space-y-4">
             <div>
               <label class="text-xs font-medium text-gray-500 mb-1.5 block">Kategori</label>
-              <select v-model="newAnggaran.kategori" required :disabled="!!editingAnggaran" class="input-field disabled:opacity-50">
-                <option value="" disabled>Pilih kategori</option>
-                <option v-for="k in categories" :key="k" :value="k">{{ k }}</option>
-              </select>
+              <BaseSelect v-model="newAnggaran.kategori" :options="categories" placeholder="Pilih kategori" :disabled="!!editingAnggaran" />
             </div>
             <div>
               <label class="text-xs font-medium text-gray-500 mb-1.5 block">Limit Bulanan (Rp)</label>
@@ -202,6 +199,7 @@ import { formatRupiah } from '@/utils/format'
 import { PlusIcon, ChartBarIcon, XMarkIcon, BellIcon, CheckCircleIcon, ClockIcon, PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import { supabase } from '@/composables/useSupabase'
 import EmptyState from '@/components/ui/EmptyState.vue'
+import BaseSelect from '@/components/ui/BaseSelect.vue'
 
 const { user } = useAuth()
 const finance = useFinance()
@@ -252,6 +250,10 @@ function confirmDeleteAnggaran(item) {
 }
 
 async function handleAddAnggaran() {
+  if (!newAnggaran.value.kategori) {
+    alert('Silakan pilih kategori terlebih dahulu')
+    return
+  }
   submitting.value = true
   try {
     await finance.upsertAnggaran({ user_id: user.value.id, ...newAnggaran.value })
