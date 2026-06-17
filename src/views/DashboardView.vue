@@ -2,7 +2,7 @@
   <div class="p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto">
 
     <!-- Header greeting -->
-    <div class="flex items-center justify-between gap-2 mb-8 animate-fade-up delay-0 relative z-[100]">
+    <div class="flex items-center justify-between gap-2 mb-8 animate-fade-up delay-0 relative z-20">
       <div class="flex items-center gap-2 sm:gap-3 min-w-0">
         <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-cream-200 border-2 border-white shadow-sm flex items-center justify-center text-xl sm:text-2xl shrink-0">
           {{ greetingEmoji }}
