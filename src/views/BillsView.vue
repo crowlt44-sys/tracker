@@ -132,6 +132,7 @@
 import { ref, onMounted } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 import { useFinance } from '@/composables/useFinance'
+import { goeyToast } from 'goey-toast-vue'
 import { formatRupiah } from '@/utils/format'
 import { PlusIcon, BellIcon, CheckCircleIcon, ClockIcon, XMarkIcon, PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import { supabase } from '@/composables/useSupabase'
@@ -186,13 +187,15 @@ async function handleAdd() {
   try {
     if (isEditing.value) {
       await finance.updateBill(editId.value, { ...newBill.value })
+      goeyToast.success('Tagihan diperbarui', { description: newBill.value.nama })
     } else {
       await finance.addBill({ user_id: user.value.id, ...newBill.value })
+      goeyToast.success('Tagihan ditambahkan', { description: newBill.value.nama })
     }
     bills.value = await finance.fetchBills(user.value.id)
     closeForm()
   } catch (err) {
-    alert('Gagal menyimpan: ' + err.message)
+    goeyToast.error('Gagal menyimpan', { description: err.message })
   } finally {
     submitting.value = false
   }
@@ -208,11 +211,12 @@ async function executeDelete() {
   submittingDelete.value = true
   try {
     await finance.deleteBill(deleteId.value)
+    goeyToast.success('Tagihan berhasil dihapus')
     bills.value = await finance.fetchBills(user.value.id)
     showDeleteModal.value = false
     deleteId.value = null
   } catch (err) {
-    alert('Gagal menghapus: ' + err.message)
+    goeyToast.error('Gagal menghapus', { description: err.message })
   } finally {
     submittingDelete.value = false
   }
@@ -224,7 +228,10 @@ async function togglePaid(bill) {
     .update({ sudah_dibayar: !bill.sudah_dibayar })
     .eq('id', bill.id)
   if (!error) {
+    goeyToast.success(bill.sudah_dibayar ? 'Status diubah ke Belum Dibayar' : 'Status diubah ke Lunas')
     bills.value = await finance.fetchBills(user.value.id)
+  } else {
+    goeyToast.error('Gagal mengubah status', { description: error.message })
   }
 }
 </script>
