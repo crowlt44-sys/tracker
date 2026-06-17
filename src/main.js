@@ -5,6 +5,9 @@ import './assets/style.css'
 import { createGoeyToastPlugin } from 'goey-toast-vue'
 import 'vue-sonner/style.css' // Base styling for fixed positioning
 import 'goey-toast-vue/styles.css'
+import { registerSW } from 'virtual:pwa-register'
+
+registerSW({ immediate: true })
 
 const app = createApp(App)
 
