@@ -73,11 +73,11 @@
 
   <!-- Mobile Bottom Nav -->
   <div
-    class="fixed bottom-0 left-0 right-0 z-40 lg:hidden"
-    style="padding-bottom: env(safe-area-inset-bottom, 12px)"
+    class="fixed bottom-0 left-0 right-0 z-40 lg:hidden flex justify-center pointer-events-none"
+    style="padding-bottom: env(safe-area-inset-bottom, 20px)"
   >
-    <div class="mx-3 mb-3">
-      <div class="bg-white/90 backdrop-blur-xl rounded-3xl px-2 py-2 flex items-center justify-around shadow-2xl shadow-black/10 border border-white/60">
+    <div class="pointer-events-auto w-[92%] max-w-[360px]">
+      <div class="glass-pill rounded-[40px] px-2 py-2.5 flex items-center justify-around">
 
         <!-- Left items -->
         <template v-for="item in leftItems" :key="item.key">

@@ -129,6 +129,10 @@
     @apply bg-white/85 backdrop-blur-2xl border border-white/50 shadow-2xl shadow-black/[0.06];
   }
 
+  .glass-pill {
+    @apply bg-white/90 backdrop-blur-xl border border-white/60 shadow-[0_20px_40px_rgb(0,0,0,0.12)];
+  }
+
   .card-dark {
     @apply bg-dark-base border border-dark-light/20 shadow-xl shadow-black/20;
     transition: transform 0.25s ease, box-shadow 0.25s ease;

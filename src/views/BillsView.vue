@@ -1,34 +1,54 @@
 <template>
   <div class="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
-    <div class="flex items-center justify-between mb-6">
-      <div>
-        <h1 class="text-xl font-bold text-dark-base">Tagihan</h1>
-        <p class="text-sm text-gray-400 mt-0.5">Kelola tagihan rutin dan cicilan</p>
-      </div>
-      <button
-        @click="showForm = true"
-        class="flex items-center gap-2 px-4 py-2.5 bg-dark-base text-white text-sm font-semibold rounded-xl hover:bg-dark-soft transition-colors"
-      >
-        <PlusIcon class="w-4 h-4" />
-        Tambah
-      </button>
+    <div class="mb-6">
+      <h1 class="text-2xl font-bold text-dark-base">Tagihan</h1>
+      <p class="text-sm text-gray-400 mt-0.5">Kelola tagihan rutin dan cicilan Anda</p>
     </div>
 
-    <div class="glass rounded-3xl p-5 sm:p-6">
+    <!-- Summary Card -->
+    <div
+      class="relative bg-gradient-to-br from-gray-900 via-[#1A1C23] to-black rounded-[32px] p-6 sm:p-8 overflow-hidden shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] border border-white/10 animate-fade-up delay-100 group mb-6"
+    >
+      <div class="absolute -right-12 -top-12 w-64 h-64 bg-gradient-to-br from-red-500/10 to-transparent rounded-full blur-[64px] group-hover:scale-110 transition-transform duration-700" />
+      <div class="absolute -left-12 -bottom-12 w-48 h-48 bg-gradient-to-tr from-white/5 to-transparent rounded-full blur-[48px] group-hover:scale-110 transition-transform duration-700" />
+
+      <div class="relative z-10">
+        <p class="text-sm font-medium text-gray-400 mb-1">Total Belum Dibayar</p>
+        <p class="text-4xl sm:text-5xl font-extrabold tracking-tight text-white mb-6">
+          {{ formatRupiah(totalBelumDibayar) }}
+        </p>
+        
+        <div class="flex items-center gap-3 sm:gap-4">
+          <div class="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-3 flex-1">
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Sudah Dibayar</p>
+            <p class="text-sm font-bold text-green-400">{{ formatRupiah(totalLunas) }}</p>
+          </div>
+          <button
+            @click="showForm = true"
+            class="bg-white text-dark-base rounded-2xl px-5 py-3 font-bold text-sm shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:-translate-y-1 transition-transform flex items-center gap-2"
+          >
+            <PlusIcon class="w-5 h-5" />
+            Tambah
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white/60 backdrop-blur-xl border border-white/60 shadow-[0_4px_20px_rgb(0,0,0,0.03)] rounded-3xl p-5 sm:p-6 animate-fade-up delay-200">
       <div v-if="bills.length" class="space-y-2">
         <div
           v-for="bill in bills"
           :key="bill.id"
-          class="flex items-center gap-4 p-3 sm:p-4 rounded-2xl hover:bg-cream-200/50 transition-colors"
+          class="flex items-center gap-4 py-4 sm:py-5 border-b border-cream-200/60 last:border-0 group"
         >
           <div
             :class="[
-              'w-10 h-10 rounded-xl flex items-center justify-center shrink-0',
-              bill.sudah_dibayar ? 'bg-green-500/15' : 'bg-kuning-pastel/20'
+              'w-12 h-12 rounded-full flex items-center justify-center shrink-0 transition-all',
+              bill.sudah_dibayar ? 'bg-green-500/10 group-hover:bg-green-500/20' : 'bg-kuning-pastel/20 group-hover:bg-kuning-pastel/30'
             ]"
           >
-            <CheckCircleIcon v-if="bill.sudah_dibayar" class="w-5 h-5 text-green-500" />
-            <ClockIcon v-else class="w-5 h-5 text-kuning-300" />
+            <CheckCircleIcon v-if="bill.sudah_dibayar" class="w-6 h-6 text-green-500" />
+            <ClockIcon v-else class="w-6 h-6 text-orange-400" />
           </div>
           <div class="flex-1 min-w-0">
             <p class="text-sm font-semibold text-dark-base">{{ bill.nama }}</p>
@@ -129,7 +149,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 import { useFinance } from '@/composables/useFinance'
 import { goeyToast } from 'goey-toast-vue'
@@ -142,6 +162,8 @@ const { user } = useAuth()
 const finance = useFinance()
 
 const bills = ref([])
+const totalBelumDibayar = computed(() => bills.value.filter(b => !b.sudah_dibayar).reduce((s, b) => s + Number(b.jumlah), 0))
+const totalLunas = computed(() => bills.value.filter(b => b.sudah_dibayar).reduce((s, b) => s + Number(b.jumlah), 0))
 const showForm = ref(false)
 const submitting = ref(false)
 const isEditing = ref(false)

@@ -8,14 +8,14 @@
       <div class="flex gap-2">
         <button
           @click="exportCSV"
-          class="flex items-center gap-2 px-3 py-2.5 bg-white border border-cream-200 text-dark-base text-sm font-semibold rounded-xl hover:bg-cream-100 transition-colors"
+          class="flex items-center gap-2 px-4 py-2 bg-white/60 backdrop-blur-md border border-white/60 text-dark-base text-xs font-bold rounded-xl hover:bg-white transition-all shadow-[0_2px_10px_rgb(0,0,0,0.02)]"
         >
           <ArrowDownTrayIcon class="w-4 h-4" />
           CSV
         </button>
         <button
           @click="exportPDF"
-          class="flex items-center gap-2 px-3 py-2.5 bg-dark-base text-white text-sm font-semibold rounded-xl hover:bg-dark-soft transition-colors"
+          class="flex items-center gap-2 px-4 py-2 bg-dark-base text-white text-xs font-bold rounded-xl hover:bg-dark-soft transition-all shadow-[0_4px_12px_rgba(0,0,0,0.1)] hover:-translate-y-0.5"
         >
           <DocumentArrowDownIcon class="w-4 h-4" />
           PDF
@@ -24,16 +24,16 @@
     </div>
 
     <!-- Tab -->
-    <div class="flex gap-2 mb-5">
+    <div class="flex p-1 mb-6 bg-cream-100/50 backdrop-blur-xl border border-cream-200/50 rounded-2xl">
       <button
         @click="activeTab = 'minggu'"
-        :class="['flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all', activeTab === 'minggu' ? 'bg-dark-base text-white' : 'bg-white text-gray-400 border border-cream-200']"
+        :class="['flex-1 py-2.5 rounded-xl text-sm font-bold transition-all duration-300', activeTab === 'minggu' ? 'bg-white text-dark-base shadow-[0_2px_8px_rgba(0,0,0,0.04)]' : 'text-gray-400 hover:text-gray-600']"
       >
         Minggu Ini
       </button>
       <button
         @click="activeTab = 'bulan'; loadBulan()"
-        :class="['flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all', activeTab === 'bulan' ? 'bg-dark-base text-white' : 'bg-white text-gray-400 border border-cream-200']"
+        :class="['flex-1 py-2.5 rounded-xl text-sm font-bold transition-all duration-300', activeTab === 'bulan' ? 'bg-white text-dark-base shadow-[0_2px_8px_rgba(0,0,0,0.04)]' : 'text-gray-400 hover:text-gray-600']"
       >
         Per Bulan
       </button>
@@ -47,44 +47,47 @@
       <!-- === TAB MINGGU === -->
       <template v-if="activeTab === 'minggu'">
         <!-- Summary -->
-        <div class="grid grid-cols-3 gap-3 mb-5">
-          <div class="glass rounded-3xl p-4 text-center">
-            <p class="text-[10px] text-gray-400 uppercase tracking-wider">Pemasukan</p>
-            <p class="text-sm font-extrabold text-green-600 mt-1">{{ formatRupiah(weekSummary.income) }}</p>
+        <div class="grid grid-cols-2 gap-3 mb-5">
+          <div class="bg-white/60 backdrop-blur-xl border border-white/60 shadow-[0_4px_20px_rgb(0,0,0,0.02)] rounded-[24px] p-4 text-center">
+            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Pemasukan</p>
+            <p class="text-sm sm:text-base font-extrabold text-green-500 mt-1">{{ formatRupiah(weekSummary.income) }}</p>
           </div>
-          <div class="glass rounded-3xl p-4 text-center">
-            <p class="text-[10px] text-gray-400 uppercase tracking-wider">Pengeluaran</p>
-            <p class="text-sm font-extrabold text-red-500 mt-1">{{ formatRupiah(weekSummary.expense) }}</p>
+          <div class="bg-white/60 backdrop-blur-xl border border-white/60 shadow-[0_4px_20px_rgb(0,0,0,0.02)] rounded-[24px] p-4 text-center">
+            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Pengeluaran</p>
+            <p class="text-sm sm:text-base font-extrabold text-red-500 mt-1">{{ formatRupiah(weekSummary.expense) }}</p>
           </div>
-          <div class="glass rounded-3xl p-4 text-center">
-            <p class="text-[10px] text-gray-400 uppercase tracking-wider">Selisih</p>
-            <p :class="['text-sm font-extrabold mt-1', weekSummary.selisih >= 0 ? 'text-green-600' : 'text-red-500']">
-              {{ formatRupiah(weekSummary.selisih) }}
-            </p>
+          <div class="col-span-2 relative bg-gradient-to-br from-gray-900 to-black rounded-[24px] p-5 text-center overflow-hidden border border-white/10 shadow-lg group">
+            <div class="absolute -right-8 -top-8 w-32 h-32 bg-kuning-pastel/10 rounded-full blur-2xl group-hover:scale-110 transition-transform duration-700" />
+            <div class="relative z-10">
+              <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Selisih Bersih</p>
+              <p :class="['text-2xl sm:text-3xl font-extrabold mt-1 tracking-tight', weekSummary.selisih >= 0 ? 'text-white' : 'text-red-400']">
+                {{ formatRupiah(weekSummary.selisih) }}
+              </p>
+            </div>
           </div>
         </div>
 
         <!-- Chart -->
-        <div class="glass rounded-3xl p-5 mb-4">
-          <h3 class="text-sm font-bold text-dark-base mb-4">Grafik Pengeluaran Harian</h3>
+        <div class="bg-white/60 backdrop-blur-xl border border-white/60 shadow-[0_4px_20px_rgb(0,0,0,0.03)] rounded-3xl p-5 sm:p-6 mb-5">
+          <h3 class="text-xs font-bold text-dark-base uppercase tracking-widest mb-4">Grafik Pengeluaran Harian</h3>
           <div class="h-[180px]">
             <Bar v-if="hasWeeklyData" :data="weeklyChartData" :options="chartOptions" />
-            <div v-else class="h-full flex items-center justify-center">
+            <div v-else class="h-full flex flex-col items-center justify-center gap-2">
               <p class="text-xs text-gray-400">Belum ada pengeluaran minggu ini</p>
             </div>
           </div>
         </div>
 
         <!-- Transaction list -->
-        <div class="glass rounded-3xl p-5">
-          <h3 class="text-sm font-bold text-dark-base mb-4">Transaksi Minggu Ini</h3>
+        <div class="bg-white/60 backdrop-blur-xl border border-white/60 shadow-[0_4px_20px_rgb(0,0,0,0.03)] rounded-3xl p-5 sm:p-6">
+          <h3 class="text-xs font-bold text-dark-base uppercase tracking-widest mb-4">Transaksi Minggu Ini</h3>
           <div v-if="weekTransaksi.length" class="space-y-1">
             <div
               v-for="txn in weekTransaksi"
               :key="txn.id"
-              class="flex items-center gap-3 py-3 border-b border-cream-200/60 last:border-0"
+              class="flex items-center gap-4 py-4 sm:py-5 border-b border-cream-200/60 last:border-0 group"
             >
-              <div :class="['w-10 h-10 rounded-2xl flex items-center justify-center shrink-0', txn.tipe === 'income' ? 'bg-green-500/10' : 'bg-red-500/10']">
+              <div :class="['w-12 h-12 rounded-full flex items-center justify-center shrink-0', txn.tipe === 'income' ? 'bg-green-500/10' : 'bg-red-500/10']">
                 <ArrowTrendingUpIcon v-if="txn.tipe === 'income'" class="w-5 h-5 text-green-500" />
                 <ArrowTrendingDownIcon v-else class="w-5 h-5 text-red-500" />
               </div>
@@ -118,57 +121,60 @@
         </div>
 
         <!-- Summary -->
-        <div class="grid grid-cols-3 gap-3 mb-5">
-          <div class="glass rounded-3xl p-4 text-center">
-            <p class="text-[10px] text-gray-400 uppercase tracking-wider">Pemasukan</p>
-            <p class="text-sm font-extrabold text-green-600 mt-1">{{ formatRupiah(monthSummary.income) }}</p>
+        <div class="grid grid-cols-2 gap-3 mb-5">
+          <div class="bg-white/60 backdrop-blur-xl border border-white/60 shadow-[0_4px_20px_rgb(0,0,0,0.02)] rounded-[24px] p-4 text-center">
+            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Pemasukan</p>
+            <p class="text-sm sm:text-base font-extrabold text-green-500 mt-1">{{ formatRupiah(monthSummary.income) }}</p>
           </div>
-          <div class="glass rounded-3xl p-4 text-center">
-            <p class="text-[10px] text-gray-400 uppercase tracking-wider">Pengeluaran</p>
-            <p class="text-sm font-extrabold text-red-500 mt-1">{{ formatRupiah(monthSummary.expense) }}</p>
+          <div class="bg-white/60 backdrop-blur-xl border border-white/60 shadow-[0_4px_20px_rgb(0,0,0,0.02)] rounded-[24px] p-4 text-center">
+            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Pengeluaran</p>
+            <p class="text-sm sm:text-base font-extrabold text-red-500 mt-1">{{ formatRupiah(monthSummary.expense) }}</p>
           </div>
-          <div class="glass rounded-3xl p-4 text-center">
-            <p class="text-[10px] text-gray-400 uppercase tracking-wider">Selisih</p>
-            <p :class="['text-sm font-extrabold mt-1', monthSummary.selisih >= 0 ? 'text-green-600' : 'text-red-500']">
-              {{ formatRupiah(monthSummary.selisih) }}
-            </p>
+          <div class="col-span-2 relative bg-gradient-to-br from-gray-900 to-black rounded-[24px] p-5 text-center overflow-hidden border border-white/10 shadow-lg group">
+            <div class="absolute -right-8 -top-8 w-32 h-32 bg-kuning-pastel/10 rounded-full blur-2xl group-hover:scale-110 transition-transform duration-700" />
+            <div class="relative z-10">
+              <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Selisih Bersih</p>
+              <p :class="['text-2xl sm:text-3xl font-extrabold mt-1 tracking-tight', monthSummary.selisih >= 0 ? 'text-white' : 'text-red-400']">
+                {{ formatRupiah(monthSummary.selisih) }}
+              </p>
+            </div>
           </div>
         </div>
 
         <!-- Chart Bulan -->
-        <div class="glass rounded-3xl p-5 mb-4" v-if="kategoriData.length">
-          <h3 class="text-sm font-bold text-dark-base mb-4">Grafik Kategori Pengeluaran</h3>
+        <div class="bg-white/60 backdrop-blur-xl border border-white/60 shadow-[0_4px_20px_rgb(0,0,0,0.03)] rounded-3xl p-5 sm:p-6 mb-5" v-if="kategoriData.length">
+          <h3 class="text-xs font-bold text-dark-base uppercase tracking-widest mb-4">Grafik Kategori Pengeluaran</h3>
           <div class="h-[220px] flex justify-center">
             <Doughnut :data="monthlyChartData" :options="monthlyChartOptions" />
           </div>
         </div>
 
         <!-- Per kategori -->
-        <div class="glass rounded-3xl p-5 mb-4" v-if="kategoriData.length">
-          <h3 class="text-sm font-bold text-dark-base mb-4">Detail per Kategori</h3>
+        <div class="bg-white/60 backdrop-blur-xl border border-white/60 shadow-[0_4px_20px_rgb(0,0,0,0.03)] rounded-3xl p-5 sm:p-6 mb-5" v-if="kategoriData.length">
+          <h3 class="text-xs font-bold text-dark-base uppercase tracking-widest mb-4">Detail per Kategori</h3>
           <div class="space-y-3">
             <div v-for="k in kategoriData" :key="k.kategori">
               <div class="flex items-center justify-between mb-1">
                 <span class="text-xs font-medium text-gray-600">{{ k.kategori }}</span>
                 <span class="text-xs font-bold text-dark-base">{{ formatRupiah(k.total) }}</span>
               </div>
-              <div class="w-full h-2 bg-cream-200 rounded-full overflow-hidden">
-                <div class="h-full bg-kuning-pastel rounded-full" :style="{ width: k.pct + '%' }" />
+              <div class="w-full h-2 bg-cream-200/50 rounded-full overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-kuning-pastel to-[#FBBF24] rounded-full" :style="{ width: k.pct + '%' }" />
               </div>
             </div>
           </div>
         </div>
 
         <!-- Transaction list -->
-        <div class="glass rounded-3xl p-5">
-          <h3 class="text-sm font-bold text-dark-base mb-4">Semua Transaksi</h3>
+        <div class="bg-white/60 backdrop-blur-xl border border-white/60 shadow-[0_4px_20px_rgb(0,0,0,0.03)] rounded-3xl p-5 sm:p-6">
+          <h3 class="text-xs font-bold text-dark-base uppercase tracking-widest mb-4">Semua Transaksi</h3>
           <div v-if="monthTransaksi.length" class="space-y-1">
             <div
               v-for="txn in monthTransaksi"
               :key="txn.id"
-              class="flex items-center gap-3 py-3 border-b border-cream-200/60 last:border-0"
+              class="flex items-center gap-4 py-4 sm:py-5 border-b border-cream-200/60 last:border-0 group"
             >
-              <div :class="['w-10 h-10 rounded-2xl flex items-center justify-center shrink-0', txn.tipe === 'income' ? 'bg-green-500/10' : 'bg-red-500/10']">
+              <div :class="['w-12 h-12 rounded-full flex items-center justify-center shrink-0', txn.tipe === 'income' ? 'bg-green-500/10' : 'bg-red-500/10']">
                 <ArrowTrendingUpIcon v-if="txn.tipe === 'income'" class="w-5 h-5 text-green-500" />
                 <ArrowTrendingDownIcon v-else class="w-5 h-5 text-red-500" />
               </div>

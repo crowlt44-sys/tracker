@@ -158,6 +158,34 @@ export function useFinance() {
     }
   }
 
+  const getHighestTransaksiBulan = async (userId, bulan, tahun) => {
+    const s = `${tahun}-${String(bulan).padStart(2, '0')}-01`
+    const e = lastDayOfMonth(tahun, bulan)
+    
+    const { data: incData } = await supabase.from('transaksi')
+      .select('jumlah, kategori')
+      .eq('user_id', userId)
+      .eq('tipe', 'income')
+      .gte('tanggal', s)
+      .lte('tanggal', e)
+      .order('jumlah', { ascending: false })
+      .limit(1)
+      
+    const { data: expData } = await supabase.from('transaksi')
+      .select('jumlah, kategori')
+      .eq('user_id', userId)
+      .eq('tipe', 'expense')
+      .gte('tanggal', s)
+      .lte('tanggal', e)
+      .order('jumlah', { ascending: false })
+      .limit(1)
+
+    return {
+      highestIncome: incData?.[0] || null,
+      highestExpense: expData?.[0] || null
+    }
+  }
+
   const getWeeklySpending = async (userId) => {
     const today = new Date()
     const dayOfWeek = today.getDay()
@@ -346,7 +374,7 @@ export function useFinance() {
     loading, error,
     fetchProfile, updateProfile,
     fetchTransaksi, addTransaksi, updateTransaksi, deleteTransaksi, fetchTransaksiRange,
-    getTotalPengeluaranBulan, getTotalPemasukanBulan, getWeeklySpending,
+    getTotalPengeluaranBulan, getTotalPemasukanBulan, getWeeklySpending, getHighestTransaksiBulan,
     fetchAnggaran, upsertAnggaran, deleteAnggaran,
     fetchGoals, addGoal,
     fetchBills, addBill, updateBill, deleteBill,

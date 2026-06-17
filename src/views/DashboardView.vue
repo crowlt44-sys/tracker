@@ -2,12 +2,22 @@
   <div class="p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto">
 
     <!-- Header greeting -->
-    <div class="mb-6 animate-fade-up delay-0">
-      <div class="flex items-center gap-2 mb-1">
-        <span class="text-2xl">{{ greetingEmoji }}</span>
-        <h1 class="text-xl font-bold text-dark-base">Dashboard</h1>
+    <div class="flex items-center justify-between gap-2 mb-8 animate-fade-up delay-0 relative z-[100]">
+      <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-cream-200 border-2 border-white shadow-sm flex items-center justify-center text-xl sm:text-2xl shrink-0">
+          {{ greetingEmoji }}
+        </div>
+        <div class="min-w-0">
+          <p class="text-[10px] sm:text-xs text-gray-500 font-medium truncate">{{ greeting }},</p>
+          <h1 class="text-sm sm:text-lg font-bold text-dark-base truncate">{{ profile?.nama_lengkap || 'Pengguna' }}</h1>
+        </div>
       </div>
-      <p class="text-sm text-gray-400 ml-9">{{ greeting }}, <span class="font-semibold text-dark-base/70">{{ profile?.nama_lengkap || 'Pengguna' }}</span></p>
+
+      <!-- Filter -->
+      <div class="flex items-center gap-2 shrink-0">
+        <BaseSelect v-model="selectedMonthName" :options="monthNames" class="w-[120px]" />
+        <BaseSelect v-model="selectedYear" :options="yearOptions" class="w-[85px] shrink-0" />
+      </div>
     </div>
 
     <!-- Loading skeleton -->
@@ -21,74 +31,111 @@
 
     <template v-else>
       <!-- Summary cards -->
-      <!-- Summary cards -->
-      <div class="space-y-4 mb-8">
-        <!-- Hero Card (Selisih / Total Saldo) -->
+      <!-- Wallet Section -->
+      <div class="mb-8">
+        <!-- Hero Card (Wallet Card) -->
         <div
-          class="relative bg-dark-base rounded-[32px] p-6 sm:p-8 overflow-hidden shadow-2xl shadow-dark-base/20 animate-fade-up delay-100 group"
+          class="relative bg-gradient-to-br from-gray-900 via-[#1A1C23] to-black rounded-[32px] p-8 overflow-hidden shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] border border-white/10 animate-fade-up delay-100 group mb-6"
           @mouseenter="tiltCard($event)"
           @mouseleave="resetTilt($event)"
         >
-          <!-- Decorative circles -->
-          <div class="absolute -right-8 -top-8 w-40 h-40 bg-white/5 rounded-full blur-2xl group-hover:bg-white/10 transition-colors duration-500" />
-          <div class="absolute -left-8 -bottom-8 w-32 h-32 bg-kuning-pastel/10 rounded-full blur-xl group-hover:bg-kuning-pastel/20 transition-colors duration-500" />
+          <!-- Decorative circles (Minimalist) -->
+          <div class="absolute -right-24 -top-24 w-72 h-72 bg-gradient-to-br from-kuning-pastel/10 to-transparent rounded-full blur-[80px] group-hover:bg-kuning-pastel/20 transition-colors duration-1000" />
+          <div class="absolute -left-24 -bottom-24 w-72 h-72 bg-gradient-to-tr from-white/5 to-transparent rounded-full blur-[80px]" />
 
-          <div class="relative z-10 flex flex-col items-center text-center">
-            <div class="flex items-center gap-2 mb-4">
-              <div class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center backdrop-blur-sm border border-white/10">
-                <SparklesIcon class="w-4 h-4 text-kuning-pastel" />
-              </div>
-              <p class="text-xs font-semibold text-white/70 uppercase tracking-widest">Total Saldo</p>
+          <!-- Elegant Watermark -->
+          <div class="absolute right-0 bottom-0 translate-x-1/4 translate-y-1/4 select-none pointer-events-none opacity-[0.04]">
+            <span class="text-[180px] font-bold text-white tracking-tighter" style="font-family: 'Elms Sans', sans-serif; line-height: 0.8;">
+              .tracker
+            </span>
+          </div>
+
+          <div class="relative z-10 flex flex-col items-start w-full">
+            
+            <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-[0.2em] mb-2">Total Balance</p>
+            <div class="flex items-start gap-2">
+              <span class="text-sm font-semibold text-kuning-pastel mt-1">IDR</span>
+              <p :class="['text-4xl sm:text-5xl font-light tracking-tight animate-count-up delay-300', selisih >= 0 ? 'text-white' : 'text-red-400']" style="font-family: 'Elms Sans', sans-serif;">
+                {{ formatRupiah(selisih).replace('Rp', '').trim() }}
+              </p>
             </div>
-            
-            <p :class="['text-4xl sm:text-5xl font-extrabold tracking-tight animate-count-up delay-300', selisih >= 0 ? 'text-white' : 'text-red-400']">
-              {{ formatRupiah(selisih) }}
-            </p>
-            
-            <div class="mt-4 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/5">
-              <div class="w-2 h-2 rounded-full animate-pulse" :class="selisih >= 0 ? 'bg-kuning-pastel shadow-[0_0_8px_rgba(255,210,84,0.6)]' : 'bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.6)]'" />
-              <span class="text-[10px] sm:text-xs font-medium text-white/80">{{ selisih >= 0 ? 'Surplus Bulan Ini' : 'Defisit Bulan Ini' }}</span>
+
+            <div class="flex items-end justify-between w-full mt-10 pt-6 border-t border-white/5">
+              <div class="flex-1 min-w-0 pr-4">
+                <p class="text-[8px] text-gray-500 font-bold uppercase tracking-[0.25em] mb-1 truncate">Cardholder Name</p>
+                <p class="text-xs text-white font-medium tracking-[0.15em] uppercase truncate w-full">{{ profile?.nama_lengkap || 'PENGGUNA' }}</p>
+              </div>
+              <div class="flex shrink-0">
+                <span
+                  class="text-lg sm:text-xl font-medium text-white tracking-widest select-none opacity-50"
+                  style="font-family: 'Elms Sans', sans-serif;"
+                >
+                  .tracker
+                </span>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Grid 2 Kolom (Pemasukan & Pengeluaran) -->
-        <div class="grid grid-cols-2 gap-3 sm:gap-4">
-          <!-- Pemasukan -->
-          <div
-            class="stat-card !p-4 sm:!p-5 animate-fade-up delay-200 group relative overflow-hidden bg-white/60 backdrop-blur-xl border border-white/50"
-            @mouseenter="tiltCard($event)"
-            @mouseleave="resetTilt($event)"
-          >
-            <div class="absolute top-0 right-0 w-20 h-20 bg-green-500/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 group-hover:bg-green-500/10 transition-colors duration-500" />
-            <div class="flex items-center gap-2.5 mb-3">
-              <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-green-500/10 flex items-center justify-center shrink-0">
-                <ArrowTrendingUpIcon class="w-4 h-4 sm:w-5 sm:h-5 text-green-500" />
-              </div>
-              <p class="text-[10px] sm:text-xs text-gray-500 font-bold uppercase tracking-widest">Pemasukan</p>
+        <!-- Quick Actions Row -->
+        <div class="flex items-center justify-between gap-3 sm:gap-4 animate-fade-up delay-200">
+          <button @click="$router.push('/transaksi')" class="flex-1 bg-white/60 backdrop-blur-xl border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-3xl p-4 flex flex-col items-center justify-center gap-2 hover:bg-white hover:-translate-y-1 transition-all group">
+            <div class="w-12 h-12 rounded-full bg-green-500/10 flex items-center justify-center group-hover:scale-110 group-hover:bg-green-500/15 transition-all">
+              <ArrowTrendingUpIcon class="w-6 h-6 text-green-500" />
             </div>
-            <p class="text-lg sm:text-2xl font-extrabold text-green-500 truncate animate-count-up delay-400">
-              {{ formatRupiah(totalPemasukan) }}
-            </p>
-          </div>
+            <span class="text-xs font-bold text-dark-base">Pemasukan</span>
+          </button>
+          
+          <button @click="$router.push('/transaksi')" class="flex-1 bg-white/60 backdrop-blur-xl border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-3xl p-4 flex flex-col items-center justify-center gap-2 hover:bg-white hover:-translate-y-1 transition-all group">
+            <div class="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center group-hover:scale-110 group-hover:bg-red-500/15 transition-all">
+              <ArrowTrendingDownIcon class="w-6 h-6 text-red-500" />
+            </div>
+            <span class="text-xs font-bold text-dark-base">Pengeluaran</span>
+          </button>
+          
+          <button @click="$router.push('/transaksi')" class="flex-1 bg-gradient-to-br from-dark-base to-black border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-3xl p-4 flex flex-col items-center justify-center gap-2 hover:shadow-xl hover:shadow-dark-base/30 hover:-translate-y-1 transition-all group">
+            <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center group-hover:scale-110 group-hover:bg-white/20 transition-all">
+              <PlusIcon class="w-6 h-6 text-white" />
+            </div>
+            <span class="text-xs font-bold text-white">Tambah</span>
+          </button>
+        </div>
+      </div>
 
-          <!-- Pengeluaran -->
-          <div
-            class="stat-card !p-4 sm:!p-5 animate-fade-up delay-300 group relative overflow-hidden bg-white/60 backdrop-blur-xl border border-white/50"
-            @mouseenter="tiltCard($event)"
-            @mouseleave="resetTilt($event)"
-          >
-            <div class="absolute top-0 right-0 w-20 h-20 bg-red-500/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 group-hover:bg-red-500/10 transition-colors duration-500" />
-            <div class="flex items-center gap-2.5 mb-3">
-              <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-red-500/10 flex items-center justify-center shrink-0">
-                <ArrowTrendingDownIcon class="w-4 h-4 sm:w-5 sm:h-5 text-red-500" />
-              </div>
-              <p class="text-[10px] sm:text-xs text-gray-500 font-bold uppercase tracking-widest">Pengeluaran</p>
+      <!-- Monthly Stats Minimalist -->
+      <div class="flex items-center justify-between bg-white/60 backdrop-blur-xl border border-white/60 shadow-[0_4px_20px_rgb(0,0,0,0.03)] rounded-2xl p-4 sm:px-6 mb-4 animate-fade-up delay-300">
+        <div class="flex-1">
+          <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest truncate">Pemasukan</p>
+          <p class="text-xs sm:text-sm font-extrabold text-green-500 mt-0.5 tracking-tight truncate" style="font-family: 'Elms Sans', sans-serif;">{{ formatRupiah(totalPemasukan) }}</p>
+        </div>
+        <div class="w-px h-8 bg-cream-200 mx-3 sm:mx-6 shrink-0"></div>
+        <div class="flex-1 text-right">
+          <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest truncate">Pengeluaran</p>
+          <p class="text-xs sm:text-sm font-extrabold text-red-500 mt-0.5 tracking-tight truncate" style="font-family: 'Elms Sans', sans-serif;">{{ formatRupiah(totalPengeluaran) }}</p>
+        </div>
+      </div>
+
+      <!-- Highest Transactions -->
+      <div class="grid grid-cols-2 gap-3 mb-4 animate-fade-up delay-300">
+        <div class="bg-white/60 backdrop-blur-xl border border-white/60 shadow-[0_4px_20px_rgb(0,0,0,0.03)] rounded-2xl p-4">
+          <div class="flex items-center gap-2 mb-3">
+            <div class="w-6 h-6 rounded-full bg-green-500/10 flex items-center justify-center shrink-0">
+              <ArrowTrendingUpIcon class="w-3.5 h-3.5 text-green-500" />
             </div>
-            <p class="text-lg sm:text-2xl font-extrabold text-red-500 truncate animate-count-up delay-500">
-              {{ formatRupiah(totalPengeluaran) }}
-            </p>
+            <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest truncate">Rekor Pemasukan</p>
           </div>
+          <p class="text-sm sm:text-base font-extrabold text-green-500 tracking-tight" style="font-family: 'Elms Sans', sans-serif;">{{ highestIncome ? formatRupiah(highestIncome.jumlah) : 'Rp 0' }}</p>
+          <p class="text-[10px] text-gray-400 font-medium truncate mt-0.5">{{ highestIncome ? highestIncome.kategori : '-' }}</p>
+        </div>
+        <div class="bg-white/60 backdrop-blur-xl border border-white/60 shadow-[0_4px_20px_rgb(0,0,0,0.03)] rounded-2xl p-4">
+          <div class="flex items-center gap-2 mb-3">
+            <div class="w-6 h-6 rounded-full bg-red-500/10 flex items-center justify-center shrink-0">
+              <ArrowTrendingDownIcon class="w-3.5 h-3.5 text-red-500" />
+            </div>
+            <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest truncate">Rekor Pengeluaran</p>
+          </div>
+          <p class="text-sm sm:text-base font-extrabold text-red-500 tracking-tight" style="font-family: 'Elms Sans', sans-serif;">{{ highestExpense ? formatRupiah(highestExpense.jumlah) : 'Rp 0' }}</p>
+          <p class="text-[10px] text-gray-400 font-medium truncate mt-0.5">{{ highestExpense ? highestExpense.kategori : '-' }}</p>
         </div>
       </div>
 
@@ -105,7 +152,7 @@
             <p class="text-xs text-gray-400 mt-0.5 ml-8">Senin – Minggu</p>
           </div>
           <div class="text-right">
-            <span class="text-xs font-bold text-dark-base block">{{ formatRupiah(totalWeekly) }}</span>
+            <span class="text-xs font-bold text-dark-base block tracking-tight" style="font-family: 'Elms Sans', sans-serif;">{{ formatRupiah(totalWeekly) }}</span>
             <span class="text-[10px] text-gray-400">total minggu ini</span>
           </div>
         </div>
@@ -138,7 +185,7 @@
           </router-link>
         </div>
 
-        <div v-if="recentTransaksi.length" class="space-y-3 mt-2">
+        <div v-if="recentTransaksi.length" class="space-y-4 mt-4">
           <div
             v-for="(txn, i) in recentTransaksi"
             :key="txn.id"
@@ -148,7 +195,7 @@
             <!-- Icon -->
             <div
               :class="[
-                'w-10 h-10 rounded-2xl flex items-center justify-center shrink-0',
+                'w-12 h-12 rounded-full flex items-center justify-center shrink-0',
                 txn.tipe === 'income' ? 'bg-green-500/10' : 'bg-red-500/10'
               ]"
             >
@@ -166,7 +213,7 @@
             </div>
             
             <!-- Amount -->
-            <p class="text-xs font-semibold text-gray-500 shrink-0">
+            <p class="text-xs font-bold text-gray-500 shrink-0 tracking-tight" style="font-family: 'Elms Sans', sans-serif;">
               {{ txn.tipe === 'income' ? '+' : '-' }}{{ formatRupiah(txn.jumlah) }}
             </p>
           </div>
@@ -184,9 +231,10 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, inject } from 'vue'
+import { ref, computed, onMounted, onUnmounted, inject, watch } from 'vue'
 import { Bar } from 'vue-chartjs'
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip } from 'chart.js'
+import BaseSelect from '@/components/ui/BaseSelect.vue'
 import { useAuth } from '@/composables/useAuth'
 import { useFinance } from '@/composables/useFinance'
 import { formatRupiah } from '@/utils/format'
@@ -196,7 +244,8 @@ import {
   ChartBarIcon,
   ClockIcon,
   ChevronRightIcon,
-  SparklesIcon
+  SparklesIcon,
+  PlusIcon
 } from '@heroicons/vue/24/outline'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip)
@@ -211,6 +260,19 @@ const recentTransaksi = ref([])
 const weeklyData = ref([])
 const totalPemasukan = ref(0)
 const totalPengeluaran = ref(0)
+const highestIncome = ref(null)
+const highestExpense = ref(null)
+
+const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']
+const currentYear = new Date().getFullYear()
+const yearOptions = [currentYear - 2, currentYear - 1, currentYear, currentYear + 1]
+
+const selectedMonthName = ref(monthNames[new Date().getMonth()])
+const selectedYear = ref(currentYear)
+
+watch([selectedMonthName, selectedYear], () => {
+  loadData()
+})
 
 const selisih = computed(() => totalPemasukan.value - totalPengeluaran.value)
 const totalWeekly = computed(() => weeklyData.value.reduce((s, d) => s + d.total, 0))
@@ -305,16 +367,16 @@ async function loadData() {
   if (!user.value) return
   loading.value = true
   try {
-    const now = new Date()
-    const bulan = now.getMonth() + 1
-    const tahun = now.getFullYear()
+    const bulan = monthNames.indexOf(selectedMonthName.value) + 1
+    const tahun = selectedYear.value
 
-    const [p, txns, weekly, income, expense] = await Promise.all([
+    const [p, txns, weekly, income, expense, highest] = await Promise.all([
       finance.fetchProfile(user.value.id),
       finance.fetchTransaksi(user.value.id, { bulan, tahun, limit: 8 }),
       finance.getWeeklySpending(user.value.id),
       finance.getTotalPemasukanBulan(user.value.id, bulan, tahun),
-      finance.getTotalPengeluaranBulan(user.value.id, bulan, tahun)
+      finance.getTotalPengeluaranBulan(user.value.id, bulan, tahun),
+      finance.getHighestTransaksiBulan(user.value.id, bulan, tahun)
     ])
 
     profile.value = p
@@ -322,6 +384,8 @@ async function loadData() {
     weeklyData.value = weekly
     totalPemasukan.value = income
     totalPengeluaran.value = expense
+    highestIncome.value = highest.highestIncome
+    highestExpense.value = highest.highestExpense
     if (totalPengeluaranGlobal) totalPengeluaranGlobal.value = expense
   } catch (err) {
     console.error('Dashboard error:', err)

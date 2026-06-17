@@ -1,20 +1,40 @@
 <template>
   <div class="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
-    <div class="flex items-center justify-between mb-6 animate-fade-up delay-0">
-      <div>
-        <h1 class="text-xl font-bold text-dark-base">Transaksi</h1>
-        <p class="text-sm text-gray-400 mt-0.5">Riwayat pemasukan dan pengeluaran</p>
-      </div>
-      <button
-        @click="openAdd"
-        class="flex items-center gap-2 px-4 py-2.5 bg-dark-base text-white text-sm font-semibold rounded-xl hover:bg-dark-soft transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-dark-base/20 active:translate-y-0 active:scale-95 btn-ripple"
-      >
-        <PlusIcon class="w-4 h-4 transition-transform duration-200 group-hover:rotate-90" />
-        Tambah
-      </button>
+    <div class="mb-6">
+      <h1 class="text-2xl font-bold text-dark-base">Transaksi</h1>
+      <p class="text-sm text-gray-400 mt-0.5">Riwayat semua pemasukan dan pengeluaran</p>
     </div>
 
-    <div class="glass rounded-3xl p-5 sm:p-6 animate-fade-up delay-100">
+    <!-- Summary Card -->
+    <div
+      class="relative bg-gradient-to-br from-gray-900 via-[#1A1C23] to-black rounded-[32px] p-6 sm:p-8 overflow-hidden shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] border border-white/10 animate-fade-up delay-100 group mb-6"
+    >
+      <div class="absolute -right-12 -top-12 w-64 h-64 bg-gradient-to-br from-green-500/10 to-transparent rounded-full blur-[64px] group-hover:scale-110 transition-transform duration-700" />
+      <div class="absolute -left-12 -bottom-12 w-48 h-48 bg-gradient-to-tr from-white/5 to-transparent rounded-full blur-[48px] group-hover:scale-110 transition-transform duration-700" />
+
+      <div class="relative z-10">
+        <p class="text-sm font-medium text-gray-400 mb-1">Total Pemasukan (50 Terakhir)</p>
+        <p class="text-4xl sm:text-5xl font-extrabold tracking-tight text-white mb-6">
+          {{ formatRupiah(totalPemasukan) }}
+        </p>
+        
+        <div class="flex items-center gap-3 sm:gap-4">
+          <div class="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-3 flex-1">
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-0.5">Total Pengeluaran</p>
+            <p class="text-sm font-bold text-red-400">{{ formatRupiah(totalPengeluaran) }}</p>
+          </div>
+          <button
+            @click="openAdd"
+            class="bg-white text-dark-base rounded-2xl px-5 py-3 font-bold text-sm shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:-translate-y-1 transition-transform flex items-center gap-2"
+          >
+            <PlusIcon class="w-5 h-5" />
+            Tambah
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white/60 backdrop-blur-xl border border-white/60 shadow-[0_4px_20px_rgb(0,0,0,0.03)] rounded-3xl p-5 sm:p-6 animate-fade-up delay-200">
       <div class="flex items-center gap-3 mb-5 overflow-x-auto pb-2 scrollbar-thin">
         <button
           v-for="f in filters"
@@ -31,12 +51,12 @@
         <div
           v-for="txn in filteredTransaksi"
           :key="txn.id"
-          class="flex items-center gap-3 sm:gap-4 py-3 sm:py-4 border-b border-cream-200/60 last:border-0 group"
+          class="flex items-center gap-4 py-4 sm:py-5 border-b border-cream-200/60 last:border-0 group"
         >
           <div
             :class="[
-              'w-10 h-10 rounded-2xl flex items-center justify-center shrink-0',
-              txn.tipe === 'income' ? 'bg-green-500/10' : 'bg-red-500/10'
+              'w-12 h-12 rounded-full flex items-center justify-center shrink-0 transition-all',
+              txn.tipe === 'income' ? 'bg-green-500/10 group-hover:bg-green-500/20' : 'bg-red-500/10 group-hover:bg-red-500/20'
             ]"
           >
             <ArrowTrendingUpIcon v-if="txn.tipe === 'income'" class="w-5 h-5 text-green-500" />
@@ -161,6 +181,9 @@ const submitting = ref(false)
 const activeFilter = ref('semua')
 const editingTxn = ref(null)
 const deletingTxn = ref(null)
+
+const totalPemasukan = computed(() => transaksi.value.filter(t => t.tipe === 'income').reduce((s, t) => s + Number(t.jumlah), 0))
+const totalPengeluaran = computed(() => transaksi.value.filter(t => t.tipe === 'expense').reduce((s, t) => s + Number(t.jumlah), 0))
 
 const filters = [
   { key: 'semua', label: 'Semua' },
